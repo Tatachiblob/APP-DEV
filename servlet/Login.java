@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dao.EmployeeDAO;
 import model.User;
@@ -19,7 +20,10 @@ public class Login extends HttpServlet {
 
     public Login() {}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	}
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+		dispatcher.forward(request, response);
+	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String userName = request.getParameter("username");
@@ -29,23 +33,28 @@ public class Login extends HttpServlet {
 		User tryLogin =  EmployeeDAO.getUser(userName, password);
 		String forward = "";
 		if(tryLogin != null){
+			HttpSession session = request.getSession();
+			session.setAttribute("loginUser", tryLogin);
 			if(tryLogin.getUserType() == 1){
-				forward = "WEB-INF/jsp/admin/index.jsp";
+				forward = "AdminMain?action=dashboard";
+				response.sendRedirect(forward);
 			}
 			else if(tryLogin.getUserType() == 2){
-				forward = "WEB-INF/jsp/branch/index.jsp";
+				forward = "BranchMain?action=dashboard";
+				response.sendRedirect(forward);
 			}
 			else if(tryLogin.getUserType() == 3){
-				forward = "WEB-INF/jsp/commissary/index.jsp";
+				forward = "ComMain?action=dashboard";
+				response.sendRedirect(forward);
 			}
 		}
 		else{
 			forward = "index.jsp";
 			String message = "Username or Password is incorrect";
 			request.setAttribute("message", message);
+			RequestDispatcher dispatcher = request.getRequestDispatcher(forward);
+			dispatcher.forward(request, response);
 		}
-		RequestDispatcher dispatcher = request.getRequestDispatcher(forward);
-		dispatcher.forward(request, response);
 	}
 
 }
