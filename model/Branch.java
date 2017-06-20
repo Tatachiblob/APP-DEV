@@ -9,6 +9,11 @@ public class Branch implements Serializable {
 
 	public Branch(){}
 
+	public Branch(String branchName, String branchAddress){
+		this.branchName = branchName;
+		this.branchAddress = branchAddress;
+	}
+
 	public Branch(int comId, String branchName, String branchAddress){
 		this.comId = comId;
 		this.branchName = branchName;
