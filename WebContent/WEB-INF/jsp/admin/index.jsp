@@ -48,7 +48,8 @@ User loginUser = (User) session.getAttribute("loginUser");
 					</div>
 				</div>
 			</div>
-			<a href="AdminMain?action=employees">
+			<a href="#">
+			<!--<a href="AdminMain?action=employees">-->
 				<div class="panel-footer">
 					<span class="pull-left">View Details</span>
 					<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -69,7 +70,8 @@ User loginUser = (User) session.getAttribute("loginUser");
 					</div>
 				</div>
 			</div>
-			<a href="AdminMain?action=inventory">
+			<a href="#">
+			<!--<a href="AdminMain?action=inventory">-->
 				<div class="panel-footer">
 					<span class="pull-left">View Details</span>
 					<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -90,7 +92,8 @@ User loginUser = (User) session.getAttribute("loginUser");
 					</div>
 				</div>
 			</div>
-			<a href="AdminMain?action=reports">
+			<a href="#">
+			<!--<a href="AdminMain?action=reports">-->
 				<div class="panel-footer">
 					<span class="pull-left">View Details</span>
 					<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>

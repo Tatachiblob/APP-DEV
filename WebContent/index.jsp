@@ -61,7 +61,6 @@ String message = (String) request.getAttribute("message");
 							<input name="fogot" type="checkbox" value="forgot">Remember Password
 						</label>
 					</div>
-					<!-- Change this to a button or input when using this as a form -->
 					<input type="submit" class="btn btn-lg btn-success btn-block" value="Login">
 					</fieldset>
 				</form>

@@ -35,15 +35,15 @@ public class Login extends HttpServlet {
 		if(tryLogin != null){
 			HttpSession session = request.getSession();
 			session.setAttribute("loginUser", tryLogin);
-			if(tryLogin.getUserType() == 1){
+			if(tryLogin.getUserType() == 101){
 				forward = "AdminMain?action=dashboard";
 				response.sendRedirect(forward);
 			}
-			else if(tryLogin.getUserType() == 2){
+			else if(tryLogin.getUserType() == 102){
 				forward = "BranchMain?action=dashboard";
 				response.sendRedirect(forward);
 			}
-			else if(tryLogin.getUserType() == 3){
+			else if(tryLogin.getUserType() == 103){
 				forward = "ComMain?action=dashboard";
 				response.sendRedirect(forward);
 			}

@@ -1,4 +1,3 @@
-<%@ include file="../../../styleinclude.jsp" %>
 <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0; background-color: #003d66;">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -39,7 +38,7 @@
 			<li>
 				<a href="#"><i class="fa fa-fw fa-users"></i> Employees<span class="fa arrow"></span></a>
 				<ul class="nav nav-second-level">
-					<li><a href="#"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>Add Employee</a></li>
+					<li><a href="AdminMain?action=addEmp"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>Add Employee</a></li>
 					<li><a href="#"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>Edit Employee</a></li>
 					<li><a href="#"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>View All Employee</a></li>
 					<li>

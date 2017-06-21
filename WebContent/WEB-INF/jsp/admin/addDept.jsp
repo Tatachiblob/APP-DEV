@@ -40,7 +40,7 @@ ArrayList<Commissary> coms = DepartmentDAO.getAllCommissary();
 <div class="row">
 	<div class="col-lg-12">
 		<div class="panel panel-default">
-			<div class="panel-heading">New Department</div>
+			<div class="panel-heading">New Department Entry</div>
 			<div class="panel-body">
 				<div class="row">
 					<div class="col-lg-6">
@@ -64,13 +64,13 @@ ArrayList<Commissary> coms = DepartmentDAO.getAllCommissary();
 							</div>
 							<div class="form-group">
 								<fieldset id="kom">
-								<label>Assign Commissary</label>
-								<select class="form-control" name="assignCom" required>
-									<option value="">Please Select</option>
-									<% for(int i = 0; i < coms.size(); i++){ %>
+									<label>Assign Commissary</label>
+									<select class="form-control" name="assignCom" required>
+										<option value="">Please Select</option>
+										<% for(int i = 0; i < coms.size(); i++){ %>
 										<option value="<%= coms.get(i).getComId() %>" ><%= coms.get(i).getComName() %></option>
-									<% } %>
-								</select>
+										<% } %>
+									</select>
 								</fieldset>
 							</div>
 							<input type="submit" class="btn btn-primary" value="Submit">

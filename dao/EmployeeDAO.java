@@ -8,6 +8,10 @@ import model.User;
 
 public class EmployeeDAO {
 
+	public static boolean addNewUser(User newUser, int deptId){
+		return false;
+	}
+
 	public static User getUser(String userName, String password){
 		User checkLogin = null;
 		Connection conn = DatabaseUtils.retrieveConnection();
@@ -18,11 +22,9 @@ public class EmployeeDAO {
 			pStmt.setString(1, userName);
 			pStmt.setString(2, password);
 			ResultSet rs = pStmt.executeQuery();
-
 			while(rs.next()){
 				checkLogin = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6));
 			}
-
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
@@ -35,7 +37,6 @@ public class EmployeeDAO {
 				}
 			}
 		}
-
 		return checkLogin;
 	}
 
