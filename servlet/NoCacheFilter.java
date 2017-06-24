@@ -9,16 +9,21 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletResponse;
+
 
 @WebFilter("/*")
-public class CharsetFilter implements Filter {
+public class NoCacheFilter implements Filter {
 
-    public CharsetFilter() {}
+    public NoCacheFilter() {}
 
 	public void destroy() {}
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		request.setCharacterEncoding("UTF-8");
+		HttpServletResponse res = (HttpServletResponse) response;
+		res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+		res.setHeader("Pragma", "no-cache");
+		res.setDateHeader("Expires", 0);
 		chain.doFilter(request, response);
 	}
 
