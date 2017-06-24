@@ -5,6 +5,13 @@
 User loginUser = (User) session.getAttribute("loginUser");
 %>
 <!DOCTYPE>
+<%if(!loginUser.getIsEmployed()){ %>
+<%
+String msg = "This accout is no longer available";
+request.setAttribute("msg", msg);
+%>
+<jsp:forward page="error.jsp"></jsp:forward>
+<%} %>
 <html lang="en">
 <head>
 <title>Admin Page</title>
@@ -32,6 +39,13 @@ User loginUser = (User) session.getAttribute("loginUser");
 	<div class="col-lg-12">
 		<div class="alert alert-info alert-dismissable">
 			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><i class="fa fa-info-circle"></i>  <strong>Hello, <%= loginUser.getFirstName() + " " + loginUser.getLastName() %>.</strong> Logged In as Administrator
+		</div>
+	</div>
+</div><!-- /.row -->
+<div class="row">
+	<div class="col-lg-12">
+		<div class="alert alert-info alert-dismissable">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><i class="fa fa-info-circle"></i>  <strong>Hello, <%= loginUser.getIsActive() + " " + loginUser.getIsEmployed() %>.</strong>
 		</div>
 	</div>
 </div><!-- /.row -->

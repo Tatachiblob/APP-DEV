@@ -7,6 +7,7 @@ public class User implements Serializable {
 	private int empId;
 	private String userName, password, firstName, lastName;
 	private int userType;
+	private boolean isActive, isEmployed;
 
 	public User(){}
 
@@ -39,5 +40,9 @@ public class User implements Serializable {
 	public void setLastName(String lastName) {this.lastName = lastName;}
 	public int getUserType() {return userType;}
 	public void setUserType(int userType) {this.userType = userType;}
+	public boolean getIsActive(){return isActive;}
+	public void setIsActive(boolean isActive){this.isActive = isActive;}
+	public boolean getIsEmployed(){return isEmployed;}
+	public void setIsEmployed(boolean isEmployed){this.isEmployed = isEmployed;}
 
 }

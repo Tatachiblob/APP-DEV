@@ -10,6 +10,31 @@ import model.Commissary;
 
 public class DepartmentDAO {
 
+	public static ArrayList<Branch> getAllBranch(){
+		ArrayList<Branch> branches = new ArrayList<>();
+		String sql = "SELECT BR_ID, BR_NAME FROM BRANCH;";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()){
+				Branch br = new Branch();
+				br.setBranchId(rs.getInt(1));
+				br.setBranchName(rs.getString(2));
+				branches.add(br);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+
+				}catch(Exception e){}
+			}
+		}
+		return branches;
+	}
+
 	public static ArrayList<Commissary> getAllCommissary(){
 		ArrayList<Commissary> coms = new ArrayList<>();
 		String sql = "SELECT COM_ID, COM_NAME FROM COMMISSARY;";
@@ -38,7 +63,7 @@ public class DepartmentDAO {
 	}
 
 	public static boolean addNewDepartment(Commissary newCommissary){
-		String sql = "INSERT INTO COMMISSARY (`COM_NAME`, `COM_ADDR`) VALUES (?, ?);";
+		String sql = "INSERT INTO COMMISSARY (COM_ID, COM_NAME, COM_ADDR) VALUES (0, ?, ?);";
 		Connection conn = DatabaseUtils.retrieveConnection();
 		boolean isInserted = false;
 		try{
@@ -65,7 +90,7 @@ public class DepartmentDAO {
 	}
 
 	public static boolean addNewDepartment(Branch newBranch){
-		String sql = "INSERT INTO BRANCH (`BR_NAME`, `BR_ADDR`, `COM_ID`) VALUES (?, ?, ?);";
+		String sql = "INSERT INTO BRANCH (BR_ID, BR_NAME, BR_ADDR, COM_ID) VALUES (0, ?, ?, ?);";
 		Connection conn = DatabaseUtils.retrieveConnection();
 		boolean isInserted = false;
 		try{
@@ -92,24 +117,4 @@ public class DepartmentDAO {
 		return isInserted;
 	}
 
-	public static void main(String[] args){
-		Connection conn = DatabaseUtils.retrieveConnection();
-		String sql = "SELECT COM_ID, COM_NAME FROM COMMISSARY;";
-
-		try{
-			PreparedStatement pStmt = conn.prepareStatement(sql);
-			ResultSet rs = pStmt.executeQuery();
-			while(rs.next()){
-
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}finally{
-			if(conn != null){
-				try{
-					conn.close();
-				}catch(Exception e){}
-			}
-		}
-	}
 }

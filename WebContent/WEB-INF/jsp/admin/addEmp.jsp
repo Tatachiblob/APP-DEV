@@ -1,8 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="model.User" %>
+<%@ page import="model.User, model.Commissary, model.Branch, java.util.ArrayList, dao.DepartmentDAO" %>
 <%
 User loginUser = (User) session.getAttribute("loginUser");
+ArrayList<Commissary> coms = DepartmentDAO.getAllCommissary();
+ArrayList<Branch> branches = DepartmentDAO.getAllBranch();
+String msg = (String) request.getAttribute("msg");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,6 +29,15 @@ User loginUser = (User) session.getAttribute("loginUser");
 		<h1 class="page-header">Create New Users</h1>
 	</div><!-- /.col-lg-12 -->
 </div><!-- /.row -->
+<% if(msg != null){ %>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="alert alert-info alert-dismissable">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><i class="fa fa-info-circle"></i>  <strong><%= msg %></strong>
+		</div>
+	</div>
+</div><!-- /.row -->
+<% } %>
 <div class="row">
 	<div class="col-lg-12">
 		<div class="panel panel-default">
@@ -64,7 +76,9 @@ User loginUser = (User) session.getAttribute("loginUser");
 								<label>Commissary Assignment</label>
 								<select class="form-control" name="assignCom" required>
 									<option value="">Please Select One</option>
-									<option value="1">1</option>
+									<% for(Commissary c : coms){ %>
+									<option value="<%=c.getComId()%>"><%= c.getComName() %></option>
+									<% } %>
 								</select>
 							</fieldset>
 						</div>
@@ -73,6 +87,9 @@ User loginUser = (User) session.getAttribute("loginUser");
 								<label>Branch Assignment</label>
 								<select class="form-control" name="assignBr" required>
 									<option value="">Please Select One</option>
+									<% for(Branch b : branches){ %>
+									<option value="<%=b.getBranchId()%>"><%= b.getBranchName() %></option>
+									<% } %>
 								</select>
 							</fieldset>
 						</div>
