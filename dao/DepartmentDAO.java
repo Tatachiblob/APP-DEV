@@ -10,6 +10,54 @@ import model.Commissary;
 
 public class DepartmentDAO {
 
+	public static boolean updateEmpComToDate(int empId){
+		boolean set = false;
+		String sql = "UPDATE EMP_COM SET TO_DATE = NOW() WHERE TO_DATE IS NULL and EMP_ID = ?;";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, empId);
+			int result = pStmt.executeUpdate();
+			if(result != 0){
+				set = true;
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			set = false;
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return set;
+	}
+
+	public static boolean updateEmpBrToDate(int empId){
+		boolean set = false;
+		String sql = "UPDATE EMP_BR SET TO_DATE = NOW() WHERE TO_DATE IS NULL and EMP_ID = ?;";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, empId);
+			int result = pStmt.executeUpdate();
+			if(result != 0){
+				set = true;
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			set = false;
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return set;
+	}
+
 	public static ArrayList<Branch> getAllBranch(){
 		ArrayList<Branch> branches = new ArrayList<>();
 		String sql = "SELECT BR_ID, BR_NAME FROM BRANCH;";

@@ -22,13 +22,11 @@ public class AddDept extends HttpServlet {
         super();
     }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-	}
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		if(session.getAttribute("loginUser") != null){
+		if(session.getAttribute("loginUser") == null){
 			request.setAttribute("message", "Redirected Back to Login Page");
 			request.getRequestDispatcher("Login?action=Login");
 		}
