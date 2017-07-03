@@ -60,7 +60,7 @@ public class DepartmentDAO {
 
 	public static ArrayList<Branch> getAllBranch(){
 		ArrayList<Branch> branches = new ArrayList<>();
-		String sql = "SELECT BR_ID, BR_NAME FROM BRANCH;";
+		String sql = "SELECT BR_ID, BR_NAME, BR_ADDR FROM BRANCH;";
 		Connection conn = DatabaseUtils.retrieveConnection();
 		try{
 			PreparedStatement pStmt = conn.prepareStatement(sql);
@@ -69,6 +69,7 @@ public class DepartmentDAO {
 				Branch br = new Branch();
 				br.setBranchId(rs.getInt(1));
 				br.setBranchName(rs.getString(2));
+				br.setBranchAddress(rs.getString(3));
 				branches.add(br);
 			}
 		}catch(Exception e){
@@ -85,17 +86,16 @@ public class DepartmentDAO {
 
 	public static ArrayList<Commissary> getAllCommissary(){
 		ArrayList<Commissary> coms = new ArrayList<>();
-		String sql = "SELECT COM_ID, COM_NAME FROM COMMISSARY;";
+		String sql = "SELECT COM_ID, COM_NAME, COM_ADDR FROM COMMISSARY;";
 		Connection conn = DatabaseUtils.retrieveConnection();
-
 		try{
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			ResultSet rs = pStmt.executeQuery();
-
 			while(rs.next()){
 				Commissary com = new Commissary();
 				com.setComId(rs.getInt(1));
 				com.setComName(rs.getString(2));
+				com.setComAddress(rs.getString(3));
 				coms.add(com);
 			}
 		}catch(Exception e) {
@@ -165,4 +165,33 @@ public class DepartmentDAO {
 		return isInserted;
 	}
 
+	public static Commissary getComById(String deptId){
+		Commissary com = null;
+		String sql = "SELECT COM_ID, COM_NAME, COM_ADDR FROM COMMISSARY WHERE PASSWORD(COM_ID) = ?;";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, deptId);
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()){
+				com = new Commissary(rs.getInt(1), rs.getString(2), rs.getString(3));
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			com = null;
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return com;
+	}
+
+	public static Branch getBrById(String deptId){
+		Branch br = null;
+		String sql = "";
+		return br;
+	}
 }

@@ -49,6 +49,9 @@ public class AdminMain extends HttpServlet {
 			if(action.equals("editEmp")){
 				forward = "WEB-INF/jsp/admin/editEmpView.jsp";
 			}
+			if(action.equals("viewDept")){
+				forward = "WEB-INF/jsp/admin/viewDept.jsp";
+			}
 		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forward);
 		dispatcher.forward(request, response);
