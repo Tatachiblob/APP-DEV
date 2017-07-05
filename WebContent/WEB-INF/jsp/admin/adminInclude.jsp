@@ -45,16 +45,16 @@
 						<a href="#"> Departments<span class="fa arrow"></span></a>
 						<ul class="nav nav-third-level">
 							<li><a href="AdminMain?action=addDept"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>Add Department</a></li>
-							<li><a href="#"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>Employee Assignment</a></li>
 							<li><a href="AdminMain?action=viewDept"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>View Departments</a></li>
 						</ul>
 					</li>
 				</ul>
 			</li><!-- Employee Drop Down -->
 			<li>
-				<a href="#"><i class="fa fa-fw fa-table"></i> Inventory<span class="fa arrow"></span></a>
+				<a href="#"><i class="fa fa-fw fa-table"></i> Inventory Management<span class="fa arrow"></span></a>
 				<ul class="nav nav-second-level">
 					<li><a href="#"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Add Inventory</a>
+					<li><a href="AdminMain?action=newSupplier"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Add Supplier</a>
 				</ul>
 			</li><!-- Inventory Drop Down -->
 			<li>

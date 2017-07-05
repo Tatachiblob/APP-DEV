@@ -219,4 +219,35 @@ public class EmployeeDAO {
 		}
 		return isAssigned;
 	}
+
+	public static boolean setNewEmployeePassword(User loginUser){
+		boolean isChanged = false;
+		String sql = "UPDATE EMPLOYEE SET PASSWORD = PASSWORD(?) WHERE EMP_ID = ?;";
+		String sql2 = "UPDATE EMPLOYEE SET IS_ACTIVE = TRUE WHERE EMP_ID = ?;";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, loginUser.getPassword());
+			pStmt.setInt(2, loginUser.getEmpId());
+			int result = pStmt.executeUpdate();
+			if(result != 0){
+				pStmt = conn.prepareStatement(sql2);
+				pStmt.setInt(1, loginUser.getEmpId());
+				int result2 = pStmt.executeUpdate();
+				if(result2 != 0){
+					isChanged = true;
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return isChanged;
+	}
+
 }

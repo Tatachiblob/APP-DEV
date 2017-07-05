@@ -28,8 +28,6 @@ public class Login extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String userName = request.getParameter("username");
 		String password = request.getParameter("password");
-		//System.out.println(userName);
-		//System.out.println(password);
 		User tryLogin =  EmployeeDAO.getUser(userName, password);
 		String forward = "";
 		if(tryLogin != null){

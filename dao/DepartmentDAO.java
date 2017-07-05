@@ -191,7 +191,26 @@ public class DepartmentDAO {
 
 	public static Branch getBrById(String deptId){
 		Branch br = null;
-		String sql = "";
+		String sql = "SELECT BR_ID, BR_NAME, FROM BRANCH WHERE PASSWORD(BR_ID) = ?;";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, deptId);
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()){
+				br = new Branch();
+				br.setBranchId(rs.getInt(1));
+				br.setBranchName(rs.getString(2));
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
 		return br;
 	}
 }

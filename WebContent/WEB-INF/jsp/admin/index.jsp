@@ -11,11 +11,12 @@ String msg = "This accout is no longer available";
 request.setAttribute("msg", msg);
 %>
 <jsp:forward page="error.jsp"></jsp:forward>
+<%}if(!loginUser.getIsActive()){%>
+<jsp:forward page="../activateAccount.jsp"></jsp:forward>
 <%} %>
 <html lang="en">
 <head>
 <title>Admin Page</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
  <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
