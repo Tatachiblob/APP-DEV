@@ -1,30 +1,39 @@
 package model;
 
 import java.io.Serializable;
-import java.util.HashMap;
 
-public class Branch extends Department implements Serializable {
+public class Branch implements Serializable {
 
-	private String branchAddr;
-	private HashMap<String, Account> managers;
+	private int branchId, comId;
+	private String branchName, branchAddress;
 
 	public Branch(){}
 
-	public Branch(String deptName, String branchAddr){
-		super(deptName);
-		this.branchAddr = branchAddr;
-		this.managers = new HashMap<>();
+	public Branch(String branchName, String branchAddress){
+		this.branchName = branchName;
+		this.branchAddress = branchAddress;
 	}
 
-	public Branch(int deptId, String deptName, String branchAddr){
-		super(deptId, deptName);
-		this.branchAddr = branchAddr;
-		this.managers = new HashMap<>();
+	public Branch(int comId, String branchName, String branchAddress){
+		this.comId = comId;
+		this.branchName = branchName;
+		this.branchAddress = branchAddress;
 	}
 
-	public String getBranchAddr(){return branchAddr;}
-	public void setBranchAddr(String branchAddr){this.branchAddr = branchAddr;}
-	public HashMap<String, Account> getClerks(){return managers;}
-	public void setClerks(HashMap<String, Account> managers){this.managers = managers;}
+	public Branch(int branchId, int comId, String branchName, String branchAddress){
+		this.branchId = branchId;
+		this.comId = comId;
+		this.branchName = branchName;
+		this.branchAddress = branchAddress;
+	}
+
+	public int getBranchId() {return branchId;}
+	public void setBranchId(int branchId) {this.branchId = branchId;}
+	public int getComId() {return comId;}
+	public void setComId(int comId) {this.comId = comId;}
+	public String getBranchName() {return branchName;}
+	public void setBranchName(String branchName) {this.branchName = branchName;}
+	public String getBranchAddress() {return branchAddress;}
+	public void setBranchAddress(String branchAddress) {this.branchAddress = branchAddress;}
 
 }

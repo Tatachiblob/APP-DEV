@@ -1,30 +1,30 @@
 package model;
 
 import java.io.Serializable;
-import java.util.HashMap;
 
-public class Commissary extends Department implements Serializable {
+public class Commissary implements Serializable {
 
-	private String comAddr;
-	private HashMap<String, Account> clerks;
+	protected int comId;
+	protected String comName, comAddress;
 
 	public Commissary(){}
 
-	public Commissary(String deptName, String comAddr){
-		super(deptName);
-		this.comAddr = comAddr;
-		this.clerks = new HashMap<>();
+	public Commissary(String comName, String comAddress){
+		this.comName = comName;
+		this.comAddress = comAddress;
 	}
 
-	public Commissary(int deptId, String deptName, String comAddr){
-		super(deptId, deptName);
-		this.comAddr = comAddr;
-		this.clerks = new HashMap<>();
+	public Commissary(int comId, String comName, String comAddress){
+		this.comId = comId;
+		this.comName = comName;
+		this.comAddress = comAddress;
 	}
 
-	public String getComAddr(){return comAddr;}
-	public void setComAddr(String comAddr){this.comAddr = comAddr;}
-	public HashMap<String, Account> getClerks(){return clerks;}
-	public void setClerks(HashMap<String, Account> clerks){this.clerks = clerks;}
+	public int getComId() {return comId;}
+	public void setComId(int comId) {this.comId = comId;}
+	public String getComName() {return comName;}
+	public void setComName(String comName) {this.comName = comName;}
+	public String getComAddress() {return comAddress;}
+	public void setComAddress(String comAddress) {this.comAddress = comAddress;}
 
 }
