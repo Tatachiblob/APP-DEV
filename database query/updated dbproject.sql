@@ -5,23 +5,16 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
 -- Schema db_appdev_udated
 -- -----------------------------------------------------
-DROP SCHEMA IF EXISTS `db_appdev_udated` ;
 
 -- -----------------------------------------------------
 -- Schema db_appdev_udated
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `db_appdev_udated` DEFAULT CHARACTER SET utf8 ;
--- -----------------------------------------------------
--- Schema dbsalesdw
--- -----------------------------------------------------
-DROP SCHEMA IF EXISTS `dbsalesdw` ;
-
--- -----------------------------------------------------
--- Schema dbsalesdw
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `dbsalesdw` DEFAULT CHARACTER SET utf8 ;
 USE `db_appdev_udated` ;
 
 -- -----------------------------------------------------
@@ -32,7 +25,6 @@ CREATE TABLE IF NOT EXISTS `db_appdev_udated`.`stock` (
   `stock_name` VARCHAR(45) NOT NULL,
   `stock_unit` VARCHAR(45) NOT NULL,
   `floor_level` DOUBLE NOT NULL,
-  `ceil_level` DOUBLE NOT NULL,
   PRIMARY KEY (`stock_id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -310,230 +302,6 @@ CREATE TABLE IF NOT EXISTS `db_appdev_udated`.`supplier_contact` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `db_appdev_udated`.`requisition_order`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `db_appdev_udated`.`requisition_order` (
-  `req_id` INT NOT NULL AUTO_INCREMENT,
-  `br_id` INT NOT NULL,
-  `record_date` DATE NOT NULL,
-  PRIMARY KEY (`req_id`, `br_id`),
-  INDEX `fk_requisition_order_branch1_idx` (`br_id` ASC),
-  CONSTRAINT `fk_requisition_order_branch1`
-    FOREIGN KEY (`br_id`)
-    REFERENCES `db_appdev_udated`.`branch` (`br_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `db_appdev_udated`.`req_ref`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `db_appdev_udated`.`req_ref` (
-  `req_id` INT NOT NULL,
-  `stock_id` INT NOT NULL,
-  `qty_requested` DOUBLE NOT NULL,
-  PRIMARY KEY (`req_id`, `stock_id`),
-  INDEX `fk_req_ref_stock1_idx` (`stock_id` ASC),
-  CONSTRAINT `fk_req_ref_requisition_order1`
-    FOREIGN KEY (`req_id`)
-    REFERENCES `db_appdev_udated`.`requisition_order` (`req_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_req_ref_stock1`
-    FOREIGN KEY (`stock_id`)
-    REFERENCES `db_appdev_udated`.`stock` (`stock_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `db_appdev_udated`.`commissary_dr`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `db_appdev_udated`.`commissary_dr` (
-  `com_dr_id` INT NOT NULL AUTO_INCREMENT,
-  `com_id` INT NOT NULL,
-  `destination_br` INT NOT NULL,
-  `creation_date` DATE NOT NULL,
-  PRIMARY KEY (`com_dr_id`, `com_id`, `destination_br`),
-  INDEX `fk_commissary_dr_commissary1_idx` (`com_id` ASC),
-  INDEX `fk_commissary_dr_branch1_idx` (`destination_br` ASC),
-  CONSTRAINT `fk_commissary_dr_commissary1`
-    FOREIGN KEY (`com_id`)
-    REFERENCES `db_appdev_udated`.`commissary` (`com_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_commissary_dr_branch1`
-    FOREIGN KEY (`destination_br`)
-    REFERENCES `db_appdev_udated`.`branch` (`br_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `db_appdev_udated`.`com_dr_details`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `db_appdev_udated`.`com_dr_details` (
-  `com_dr_id` INT NOT NULL,
-  `stock_id` INT NOT NULL,
-  `deliver_qty` DOUBLE NOT NULL,
-  PRIMARY KEY (`com_dr_id`, `stock_id`),
-  INDEX `fk_com_dr_ref_stock1_idx` (`stock_id` ASC),
-  CONSTRAINT `fk_com_dr_ref_commissary_dr1`
-    FOREIGN KEY (`com_dr_id`)
-    REFERENCES `db_appdev_udated`.`commissary_dr` (`com_dr_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_com_dr_ref_stock1`
-    FOREIGN KEY (`stock_id`)
-    REFERENCES `db_appdev_udated`.`stock` (`stock_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `db_appdev_udated`.`supplier_dr`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `db_appdev_udated`.`supplier_dr` (
-  `sup_dr_id` INT NOT NULL,
-  `sup_id` INT NOT NULL,
-  `com_id` INT NOT NULL,
-  `received_date` DATE NOT NULL,
-  PRIMARY KEY (`sup_dr_id`, `sup_id`, `com_id`),
-  INDEX `fk_supplier_dr_supplier1_idx` (`sup_id` ASC),
-  INDEX `fk_supplier_dr_commissary1_idx` (`com_id` ASC),
-  CONSTRAINT `fk_supplier_dr_supplier1`
-    FOREIGN KEY (`sup_id`)
-    REFERENCES `db_appdev_udated`.`supplier` (`supplier_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_supplier_dr_commissary1`
-    FOREIGN KEY (`com_id`)
-    REFERENCES `db_appdev_udated`.`commissary` (`com_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `db_appdev_udated`.`sup_dr_details`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `db_appdev_udated`.`sup_dr_details` (
-  `sup_dr_id` INT NOT NULL,
-  `stock_id` INT NOT NULL,
-  `deliver_qty` DOUBLE NOT NULL,
-  PRIMARY KEY (`sup_dr_id`, `stock_id`),
-  INDEX `fk_sup_dr_ref_stock1_idx` (`stock_id` ASC),
-  CONSTRAINT `fk_sup_dr_ref_stock1`
-    FOREIGN KEY (`stock_id`)
-    REFERENCES `db_appdev_udated`.`stock` (`stock_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_sup_dr_ref_supplier_dr1`
-    FOREIGN KEY (`sup_dr_id`)
-    REFERENCES `db_appdev_udated`.`supplier_dr` (`sup_dr_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-USE `dbsalesdw` ;
-
--- -----------------------------------------------------
--- Table `dbsalesdw`.`dim_month`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbsalesdw`.`dim_month` (
-  `monthID` INT(11) NOT NULL,
-  `month` VARCHAR(45) NULL DEFAULT NULL,
-  PRIMARY KEY (`monthID`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `dbsalesdw`.`dim_productline`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbsalesdw`.`dim_productline` (
-  `productlineID` INT(11) NOT NULL,
-  `productline` VARCHAR(45) NULL DEFAULT NULL,
-  PRIMARY KEY (`productlineID`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `dbsalesdw`.`dim_product`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbsalesdw`.`dim_product` (
-  `productID` INT(11) NOT NULL,
-  `productCODE` VARCHAR(15) NULL DEFAULT NULL,
-  `productNAME` VARCHAR(70) NULL DEFAULT NULL,
-  `productlineID` INT(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`productID`),
-  INDEX `fk_DIM_PRODUCT_DIM_PRODUCTLINE_idx` (`productlineID` ASC),
-  CONSTRAINT `fk_DIM_PRODUCT_DIM_PRODUCTLINE`
-    FOREIGN KEY (`productlineID`)
-    REFERENCES `dbsalesdw`.`dim_productline` (`productlineID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `dbsalesdw`.`dim_year`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbsalesdw`.`dim_year` (
-  `yearID` INT(11) NOT NULL,
-  PRIMARY KEY (`yearID`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `dbsalesdw`.`facttable`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dbsalesdw`.`facttable` (
-  `productID` INT(11) NOT NULL,
-  `monthID` INT(11) NOT NULL,
-  `yearID` INT(11) NOT NULL,
-  `saleAtMSRP` DOUBLE NULL DEFAULT NULL,
-  `actualSale` DOUBLE NULL DEFAULT NULL,
-  `noOfOrders` INT(11) NULL DEFAULT NULL,
-  `totalTax` DOUBLE NULL DEFAULT NULL,
-  `totalcostofbuying` DOUBLE NULL DEFAULT NULL,
-  `totalincome` DOUBLE NULL DEFAULT NULL,
-  `totaldiscount` DOUBLE NULL DEFAULT NULL,
-  `totalmarkup` DOUBLE NULL DEFAULT NULL,
-  PRIMARY KEY (`productID`, `monthID`, `yearID`),
-  INDEX `fk_FACTTABLE_DIM_MONTH1_idx` (`monthID` ASC),
-  INDEX `fk_FACTTABLE_DIM_YEAR1_idx` (`yearID` ASC),
-  CONSTRAINT `fk_FACTTABLE_DIM_MONTH1`
-    FOREIGN KEY (`monthID`)
-    REFERENCES `dbsalesdw`.`dim_month` (`monthID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_FACTTABLE_DIM_PRODUCT1`
-    FOREIGN KEY (`productID`)
-    REFERENCES `dbsalesdw`.`dim_product` (`productID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_FACTTABLE_DIM_YEAR1`
-    FOREIGN KEY (`yearID`)
-    REFERENCES `dbsalesdw`.`dim_year` (`yearID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
 -- -----------------------------------------------------
 -- Data for table `db_appdev_udated`.`commissary`
 -- -----------------------------------------------------
@@ -571,9 +339,10 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `db_appdev_udated`;
-INSERT INTO `db_appdev_udated`.`employee` (`emp_id`, `user_name`, `password`, `first_name`, `last_name`, `user_type`, `is_active`, `is_employed`) VALUES (1, 'TempAdmin', PASSWORD('admin'), 'Yuta', 'Inoue', 101, 1, 1);
+INSERT INTO `db_appdev_udated`.`employee` (`emp_id`, `user_name`, `password`, `first_name`, `last_name`, `user_type`, `is_active`, `is_employed`) VALUES (1, 'TempAdmin', 'admin', 'Yuta', 'Inoue', 101, 1, 1);
 
 COMMIT;
+
 
 USE `db_appdev_udated`;
 
@@ -632,14 +401,9 @@ BEGIN
 	SET NEW.IS_CONTACTABLE = TRUE;
 END$$
 
-USE `db_appdev_udated`$$
-CREATE DEFINER = CURRENT_USER TRIGGER `db_appdev_udated`.`requisition_order_BEFORE_INSERT` BEFORE INSERT ON `requisition_order` FOR EACH ROW
-BEGIN
-	SET NEW.RECORD_DATE = NOW();
-	IF((SELECT MAX(RECORD_DATE) FROM REQUISITION_ORDER) = NEW.RECORD_DATE) THEN
-		SIGNAL SQLSTATE '49001' SET MESSAGE_TEXT = 'Cannot create multiple requisition order at the same day.';
-    END IF;
-END$$
-
 
 DELIMITER ;
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
