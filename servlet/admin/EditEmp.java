@@ -29,14 +29,25 @@ public class EditEmp extends HttpServlet {
 		}
 		else{
 			String emp = request.getParameter("emp");
+			String type = request.getParameter("type");
 			User editableUser = null;
 			for(User u : EmployeeDAO.getEmps()){
 				if(EmployeeDAO.passFunction(Integer.toString(u.getEmpId())).equals(emp)){
 					editableUser = u;
 				}
 			}
-			request.setAttribute("editableUser", editableUser);
-			request.getRequestDispatcher("WEB-INF/jsp/admin/editEmpForm.jsp").forward(request, response);
+			if(editableUser != null && type.equals("edit")){
+				request.setAttribute("editableUser", editableUser);
+				request.getRequestDispatcher("WEB-INF/jsp/admin/editEmpForm.jsp").forward(request, response);
+			}
+			else if(editableUser != null && type.equals("delete")){
+				request.setAttribute("editableUser", editableUser);
+				request.getRequestDispatcher("WEB-INF/jsp/admin/deleteEmp.jsp").forward(request, response);
+			}
+			else{
+				request.setAttribute("msg", "Cannot Find Selected Employee");
+				request.getRequestDispatcher("WEB-INF/jsp/admin/editEmpView.jsp").forward(request, response);
+			}
 		}
 	}
 

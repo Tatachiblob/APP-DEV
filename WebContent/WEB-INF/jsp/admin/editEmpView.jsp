@@ -49,6 +49,7 @@ String msg = (String) request.getAttribute("msg");
 							<th>Full Name</th>
 							<th>User Type</th>
 							<th>Edit Employee</th>
+							<th>Delete User</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -64,7 +65,8 @@ String msg = (String) request.getAttribute("msg");
 							<%}else if(u.getUserType() == 103){ %>
 							<td>Commissary Clerk</td>
 							<%} %>
-							<td align="center"><a href="EditEmp?emp=<%=EmployeeDAO.passFunction(Integer.toString(u.getEmpId()))%>"><i class="fa fa-edit"></i></a></td>
+							<td align="center"><a class="btn btn-default" href="EditEmp?emp=<%=EmployeeDAO.passFunction(Integer.toString(u.getEmpId()))%>&type=edit"><i class="fa fa-edit"></i></a></td>
+							<td align="center"><a class="btn btn-default" href="EditEmp?emp=<%=EmployeeDAO.passFunction(Integer.toString(u.getEmpId()))%>&type=delete"><i class="fa fa-eraser"></i></a></td>
 						</tr>
 						<%} %>
 						<%} %>

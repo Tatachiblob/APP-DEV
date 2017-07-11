@@ -53,7 +53,7 @@
 			<li>
 				<a href="#"><i class="fa fa-fw fa-table"></i> Inventory Management<span class="fa arrow"></span></a>
 				<ul class="nav nav-second-level">
-					<li><a href="#"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Add Inventory</a>
+					<li><a href="AdminMain?action=newInventory"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Add Inventory</a>
 					<li><a href="AdminMain?action=newSupplier"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Add Supplier</a>
 				</ul>
 			</li><!-- Inventory Drop Down -->

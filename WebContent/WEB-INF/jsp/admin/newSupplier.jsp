@@ -3,6 +3,7 @@
 <%@ page import="model.User" %>
 <%
 User loginUser = (User) session.getAttribute("loginUser");
+String msg = (String) request.getAttribute("msg");
 %>
 <!DOCTYPE>
 <html>
@@ -25,6 +26,15 @@ User loginUser = (User) session.getAttribute("loginUser");
 		<h1 class="page-header">Add New Supplier Information</h1>
 	</div><!-- /.col-lg-12 -->
 </div><!-- /.row -->
+<% if(msg != null){ %>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="alert alert-info alert-dismissable">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><i class="fa fa-info-circle"></i>  <strong><%= msg %></strong>
+		</div>
+	</div>
+</div><!-- /.row -->
+<% } %>
 <div class="row">
 	<div class="col-lg-12">
 		<div class="panel panel-default">

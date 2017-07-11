@@ -33,7 +33,8 @@ CREATE TABLE IF NOT EXISTS `db_appdev_udated`.`stock` (
   `stock_unit` VARCHAR(45) NOT NULL,
   `floor_level` DOUBLE NOT NULL,
   `ceil_level` DOUBLE NOT NULL,
-  PRIMARY KEY (`stock_id`))
+  PRIMARY KEY (`stock_id`),
+  UNIQUE INDEX `stock_name_UNIQUE` (`stock_name` ASC))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -571,7 +572,7 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `db_appdev_udated`;
-INSERT INTO `db_appdev_udated`.`employee` (`emp_id`, `user_name`, `password`, `first_name`, `last_name`, `user_type`, `is_active`, `is_employed`) VALUES (1, 'TempAdmin', PASSWORD('admin'), 'Yuta', 'Inoue', 101, 1, 1);
+INSERT INTO `db_appdev_udated`.`employee` (`emp_id`, `user_name`, `password`, `first_name`, `last_name`, `user_type`, `is_active`, `is_employed`) VALUES (1, 'TempAdmin', 'admin', 'Yuta', 'Inoue', 101, 1, 1);
 
 COMMIT;
 

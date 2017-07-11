@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import dao.SupplierDAO;
 import model.ContactPerson;
 import model.Supplier;
 
@@ -38,8 +39,21 @@ public class AddSupplier extends HttpServlet {
 			ContactPerson newContact = new ContactPerson();
 			newContact.setContactName(contactPerson);
 			newContact.setContactInfo(contactInfo);
-
-
+			String msg = "";
+			if(SupplierDAO.addNewSupplier(newSupplier)){
+				newSupplier = SupplierDAO.getSupplierByName(supplierName);
+				if(SupplierDAO.addNewSupplierContact(newContact, newSupplier)){
+					msg = "New supplier and contact added";
+				}
+				else{
+					msg = "New supplier added but contact person wasn't able to be added";
+				}
+			}
+			else{
+				msg = "Unable to add new supplier";
+			}
+			request.setAttribute("msg", msg);
+			request.getRequestDispatcher("WEB-INF/jsp/admin/newSupplier.jsp").forward(request, response);
 		}
 	}
 
