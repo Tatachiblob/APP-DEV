@@ -74,24 +74,22 @@ DEFAULT CHARACTER SET = utf8;
 -- Table `db_appdev_udated`.`br_inventory`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `db_appdev_udated`.`br_inventory` (
-  `br_id` INT(11) NOT NULL,
-  `stock_id` INT(11) NOT NULL,
-  `recorded_date` DATE NOT NULL,
-  `qty` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`br_id`, `stock_id`, `recorded_date`),
-  INDEX `fk_br_inventory_stock1_idx` (`stock_id` ASC),
-  CONSTRAINT `fk_br_inventory_stock1`
-    FOREIGN KEY (`stock_id`)
-    REFERENCES `db_appdev_udated`.`stock` (`stock_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_br_inventory_branch1`
+  `br_id` INT NOT NULL,
+  `stock_id` INT NOT NULL,
+  `current_qty` DOUBLE NULL,
+  PRIMARY KEY (`br_id`, `stock_id`),
+  INDEX `fk_br_inventory_stock2_idx` (`stock_id` ASC),
+  CONSTRAINT `fk_br_inventory_branch2`
     FOREIGN KEY (`br_id`)
     REFERENCES `db_appdev_udated`.`branch` (`br_id`)
     ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_br_inventory_stock2`
+    FOREIGN KEY (`stock_id`)
+    REFERENCES `db_appdev_udated`.`stock` (`stock_id`)
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -438,6 +436,130 @@ CREATE TABLE IF NOT EXISTS `db_appdev_udated`.`sup_dr_details` (
   CONSTRAINT `fk_sup_dr_ref_supplier_dr1`
     FOREIGN KEY (`sup_dr_id`)
     REFERENCES `db_appdev_udated`.`supplier_dr` (`sup_dr_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `db_appdev_udated`.`com_inventroy`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db_appdev_udated`.`com_inventroy` (
+  `com_id` INT NOT NULL,
+  `stock_id` INT NOT NULL,
+  `current_qty` DOUBLE NULL,
+  PRIMARY KEY (`com_id`, `stock_id`),
+  INDEX `fk_com_inventroy_stock1_idx` (`stock_id` ASC),
+  CONSTRAINT `fk_com_inventroy_commissary1`
+    FOREIGN KEY (`com_id`)
+    REFERENCES `db_appdev_udated`.`commissary` (`com_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_com_inventroy_stock1`
+    FOREIGN KEY (`stock_id`)
+    REFERENCES `db_appdev_udated`.`stock` (`stock_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `db_appdev_udated`.`br_inventory`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db_appdev_udated`.`br_inventory` (
+  `br_id` INT NOT NULL,
+  `stock_id` INT NOT NULL,
+  `current_qty` DOUBLE NULL,
+  PRIMARY KEY (`br_id`, `stock_id`),
+  INDEX `fk_br_inventory_stock2_idx` (`stock_id` ASC),
+  CONSTRAINT `fk_br_inventory_branch2`
+    FOREIGN KEY (`br_id`)
+    REFERENCES `db_appdev_udated`.`branch` (`br_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_br_inventory_stock2`
+    FOREIGN KEY (`stock_id`)
+    REFERENCES `db_appdev_udated`.`stock` (`stock_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `db_appdev_udated`.`br_monthly_inventory`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db_appdev_udated`.`br_monthly_inventory` (
+  `br_inventory_id` INT NOT NULL AUTO_INCREMENT,
+  `br_id` INT NOT NULL,
+  `stock_id` INT NOT NULL,
+  `yearMonth` DATE NOT NULL,
+  `quantity` DOUBLE NOT NULL,
+  PRIMARY KEY (`br_inventory_id`, `br_id`, `stock_id`, `yearMonth`),
+  INDEX `fk_br_monthly_inventory_br_inventory2_idx` (`stock_id` ASC),
+  CONSTRAINT `fk_br_monthly_inventory_br_inventory1`
+    FOREIGN KEY (`br_id`)
+    REFERENCES `db_appdev_udated`.`br_inventory` (`br_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_br_monthly_inventory_br_inventory2`
+    FOREIGN KEY (`stock_id`)
+    REFERENCES `db_appdev_udated`.`br_inventory` (`stock_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `db_appdev_udated`.`br_discrepancy`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db_appdev_udated`.`br_discrepancy` (
+  `br_inventory_id` INT NOT NULL,
+  `discrepancy_type` VARCHAR(45) NOT NULL,
+  `quantity` DOUBLE NOT NULL,
+  PRIMARY KEY (`br_inventory_id`),
+  CONSTRAINT `fk_br_discrepancy_br_monthly_inventory1`
+    FOREIGN KEY (`br_inventory_id`)
+    REFERENCES `db_appdev_udated`.`br_monthly_inventory` (`br_inventory_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `db_appdev_udated`.`com_monthly_inventory`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db_appdev_udated`.`com_monthly_inventory` (
+  `com_invenory_id` INT NOT NULL AUTO_INCREMENT,
+  `com_id` INT NOT NULL,
+  `stock_id` INT NOT NULL,
+  `yearMonth` DATE NOT NULL,
+  `quantity` DOUBLE NOT NULL,
+  PRIMARY KEY (`com_invenory_id`, `com_id`, `stock_id`, `yearMonth`),
+  INDEX `fk_com_monthly_inventory_com_inventroy2_idx` (`stock_id` ASC),
+  CONSTRAINT `fk_com_monthly_inventory_com_inventroy1`
+    FOREIGN KEY (`com_id`)
+    REFERENCES `db_appdev_udated`.`com_inventroy` (`com_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_com_monthly_inventory_com_inventroy2`
+    FOREIGN KEY (`stock_id`)
+    REFERENCES `db_appdev_udated`.`com_inventroy` (`stock_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `db_appdev_udated`.`com_discrepancy`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db_appdev_udated`.`com_discrepancy` (
+  `com_inventory_id` INT NOT NULL,
+  `discrepancy_type` VARCHAR(45) NOT NULL,
+  `quantity` DOUBLE NOT NULL,
+  PRIMARY KEY (`com_inventory_id`),
+  CONSTRAINT `fk_com_discrepancy_com_monthly_inventory1`
+    FOREIGN KEY (`com_inventory_id`)
+    REFERENCES `db_appdev_udated`.`com_monthly_inventory` (`com_invenory_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
