@@ -4,6 +4,7 @@
 <%
 User loginUser = (User) session.getAttribute("loginUser");
 User editUser = (User) request.getAttribute("editableUser");
+String fullName = editUser.getFirstName() + ", " + editUser.getLastName();
 %>
 <!DOCTYPE html>
 <html>
@@ -29,11 +30,21 @@ User editUser = (User) request.getAttribute("editableUser");
 <div class="row">
 	<div class="col-lg-12">
 		<div class="panel panel-default">
-			<div class="panel-heading"><%=editUser.getLastName() + ", " + editUser.getFirstName()%></div>
+			<div class="panel-heading">Delete Employee Entry</div>
 			<div class="panel-body">
 				<div class="row">
 					<div class="col-lg-6">
-
+						<form action="Delete" method="post">
+							<input type="hidden" name="empId" value="<%=editUser.getEmpId()%>">
+							<input type="hidden" name="empType" value="<%=editUser.getUserType() %>">
+							<fieldset disabled>
+								<div class="form-group">
+									<label>Employee Name</label>
+									<input class="form-control" type="text" placeholder="<%=fullName%>" disabled>
+								</div>
+							</fieldset>
+							<input type="submit" class="btn btn-danger" value="Delete">
+						</form>
 					</div><!-- /.col-lg-6 -->
 				</div><!-- /.row -->
 			</div><!-- /.panel-body -->

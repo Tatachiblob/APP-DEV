@@ -3,10 +3,35 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
+import model.Inventory;
 import model.Stock;
 import model.Supplier;
 public class StockDAO {
+
+	public static ArrayList<Inventory> getBranchInventory(int brId){
+		ArrayList<Inventory> inventory = new ArrayList<>();
+		String sql = "SELECT S.STOCK_NAME, BI.CURRENT_QTY FROM BR_INVENTORY AS BI JOIN STOCK AS S ON BI.STOCK_ID = S.STOCK_ID WHERE BI.BR_ID = ?;";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, brId);
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()){
+				inventory.add(new Inventory(getStockByName(rs.getString(1)), rs.getDouble(2)));
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return inventory;
+	}
 
 	public static Stock getStockByName(String stockName){
 		Stock stock = null;
@@ -80,11 +105,4 @@ public class StockDAO {
     	}
     	return isAssigned;
     }
-
-    /*
-    public static void main(String[] args){
-    	Stock stock = getStockByName("Pork Loin");
-    	System.out.println(stock.getStockId());
-    }
-    */
 }
