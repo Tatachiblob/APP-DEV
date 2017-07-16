@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import model.Inventory;
 import model.InventoryStatus;
 
 public class CustomDAO {
@@ -55,23 +56,77 @@ public class CustomDAO {
 		return stats;
 	}
 
-	public static void main(String[] args){
-		for(InventoryStatus is : getComInventoryStatus(1000)){
-			System.out.println("COM_NAME: " + is.getDeptName());
-			System.out.println("STOCK_NAME: " + is.getStockName());
-			System.out.println("CURRENT_QTY: " + is.getCurrentQty());
-			System.out.println("STOCK_UNIT: " + is.getStockUnit());
-			System.out.println("STOCK_STATUS: " + is.getStockStatus());
-			System.out.println("----------------------------------------------------------");
+	public static boolean createRequisition(int brId){
+		boolean isCreated = false;
+		String sql = "INSERT INTO REQUISITION_ORDER (BR_ID, RECORD_DATE) VALUES (?, NOW());";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, brId);
+			if(pStmt.executeUpdate() != 0){
+				isCreated = true;
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
 		}
-		System.out.println("++++++++++++++++++++++++++++++++++++++++");
-		for(InventoryStatus is : getBrInventoryStatus(1100)){
-			System.out.println("BR_NAME: " + is.getDeptName());
-			System.out.println("STOCK_NAME: " + is.getStockName());
-			System.out.println("CURRENT_QTY: " + is.getCurrentQty());
-			System.out.println("STOCK_UNIT: " + is.getStockUnit());
-			System.out.println("STOCK_STATUS: " + is.getStockStatus());
-			System.out.println("----------------------------------------------------------");
-		}
+		return isCreated;
 	}
+
+	//Sole purpose for getting the latest reqId for inserting into Req details.
+	public static int getLatestRequisition(){
+		int reqId = -1;
+		String sql = "SELECT REQ_ID FROM REQUISITION_ORDER WHERE DATE(RECORD_DATE) = DATE(NOW());";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()){
+				reqId = rs.getInt(1);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch (Exception e) {}
+			}
+		}
+		return reqId;
+	}
+
+	public static boolean insertRequisitionDetails(int reqId, ArrayList<Inventory> endingInventory){
+		boolean isAdded = false;
+		int count = 0;
+		String sql = "INSERT INTO REQUISITIONDETAILS(REQ_ID, STOCK_ID, QTY_REQUESTED) VALUES (?, ?, ?);";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			for(Inventory i : endingInventory){
+				pStmt.setInt(1, reqId);
+				pStmt.setInt(2, i.getStock().getStockId());
+				pStmt.setDouble(3, i.getQuantity());
+				if(pStmt.executeUpdate() != 0)
+					count++;
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		if(count == endingInventory.size())
+			isAdded = true;
+		return isAdded;
+	}
+
 }

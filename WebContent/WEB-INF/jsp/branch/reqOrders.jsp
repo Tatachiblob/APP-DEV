@@ -31,31 +31,38 @@ ArrayList<Inventory> inventory = StockDAO.getBranchInventory(br.getBranchId());
 	</div><!-- /.col-lg-12 -->
 </div><!-- /.row -->
 <div class="row">
-	<div class="panel panel-default">
-		<div class="panel-heading"><%=br.getBranchName()%>'s Ending Inventory</div>
-		<div class="panel-body">
-			<div class="col-lg-6">
-				<table width="100%" class="table table-striped table-bordered table-hover" id="reqOrderTable">
-					<thead>
-						<th>Stock Name</th>
-						<th>System Quantity</th>
-						<th>Stock Unit</th>
-						<th>Ending Inventory</th>
-					</thead>
-					<tbody>
-					<%for(Inventory i : inventory){ %>
-					<tr>
-						<td><%=i.getStock().getName() %></td>
-						<td><%=i.getQuantity() %></td>
-						<td><%=i.getStock().getUnit() %></td>
-						<td>ASD</td>
-					</tr>
-					<%} %>
-					</tbody>
-				</table>
-			</div><!-- /.col-lg-6 -->
-		</div><!-- /.panel-body -->
-	</div><!-- /.panel panel-default -->
+	<div class="col-lg-6">
+		<form action="RequisitionOrderProcess" method="post">
+		<div class="panel panel-default">
+			<div class="panel-heading"><%=br.getBranchName()%>'s Ending Inventory</div>
+			<div class="panel-body">
+				<div class="col-lg-12">
+					<table width="100%" class="table table-striped table-bordered table-hover" id="reqOrderTable">
+						<thead>
+							<th>Stock Name</th>
+							<th>System Quantity</th>
+							<th>Stock Unit</th>
+							<th>Ending Inventory</th>
+						</thead>
+						<tbody>
+						<%for(Inventory i : inventory){ %>
+						<tr>
+							<td><%=i.getStock().getName() %></td>
+							<td><%=i.getQuantity() %></td>
+							<td><%=i.getStock().getUnit() %></td>
+							<td><input type="number" step="0.01" name="endingInventory<%=i.getStock().getStockId()%>" placeholder="<%=i.getStock().getName() + " ending"%>" required></td>
+						</tr>
+						<%} %>
+						</tbody>
+					</table>
+				</div><!-- /.col-lg-6 -->
+			</div><!-- /.panel-body -->
+		<div class="panel-footer">
+			<input type="submit" value="Submit" class="btn btn-block btn-success">
+		</div><!-- /.panel-footer -->
+		</div><!-- /.panel-default -->
+		</form>
+	</div><!-- /.col-lg-6 -->
 </div><!-- /.row -->
 </div><!-- /#page-wrapper -->
 </div><!-- /#wrapper -->
