@@ -14,7 +14,7 @@
 		<a style ="color:white;"class="navbar-brand" href="AdminMain?action=dashboard">Komoro Inventory System</a>
 	</div><!-- /.navbar-header -->
 	<ul class="nav navbar-top-links navbar-right">
-            <li style="color:white;"> <%= test.getFirstName() + " " + test.getLastName() %> </li>
+        <li style="color:white;"> <%= test.getFirstName() + " " + test.getLastName() %> </li>
 	<li class="dropdown">
 		<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 			<i style = "color: #ffa31a;" class="fa fa-user fa-fw"></i> <i style = "color: white;"class="fa fa-caret-down"></i>
@@ -30,36 +30,13 @@
 	<div class="navbar-default sidebar" role="navigation">
 		<div class="sidebar-nav navbar-collapse">
 		<ul class="nav" id="side-menu">
-			<!--
-			<li class="sidebar-search">
-				<div class="input-group custom-search-form">
-					<input type="text" class="form-control" placeholder="Search...">
-					<span class="input-group-btn">
-						<button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
-					</span>
-				</div><!-- /input-group --
-			</li><!--Search Bar-->
-			<li><a href="AdminMain?action=dashboard"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a></li>
-			<li>
-				<a href="#"><i class="fa fa-fw fa-users"></i> Employees<span class="fa arrow"></span></a>
-				<ul class="nav nav-second-level">
-					<li><a href="AdminMain?action=addEmp"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>Add Employee</a></li>
-					<li><a href="AdminMain?action=editEmp"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>Edit Employee</a></li>
-					<li><a href="#"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>View All Employee</a></li>
-					<li>
-						<a href="#"> Departments<span class="fa arrow"></span></a>
-						<ul class="nav nav-third-level">
-							<li><a href="AdminMain?action=addDept"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>Add Department</a></li>
-							<li><a href="AdminMain?action=viewDept"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>View Departments</a></li>
-						</ul>
-					</li>
-				</ul>
-			</li><!-- Employee Drop Down -->
+
+			<li><a href="ComMain?action=dashboard"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a></li>
+
 			<li>
 				<a href="#"><i class="fa fa-fw fa-table"></i> Inventory Management<span class="fa arrow"></span></a>
 				<ul class="nav nav-second-level">
-					<li><a href="AdminMain?action=newInventory"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Add Inventory</a>
-					<li><a href="AdminMain?action=newSupplier"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Add Supplier</a>
+					<li><a href="ComMain?action=receiveStock"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Receive Stock</a>
 				</ul>
 			</li><!-- Inventory Drop Down -->
 			<li>
