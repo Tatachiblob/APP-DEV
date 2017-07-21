@@ -31,7 +31,6 @@ public class ChangeSupplier extends HttpServlet {
 			request.getRequestDispatcher("Login?action=Login");
 		}
                 else{
-                        session.setAttribute("addItemTrigger", "0");
                         Supplier selectedsupp = SupplierDAO.getSupplierById(Integer.parseInt(request.getParameter("choosesupp")));
                         String msg = "Supplier was changed to " + selectedsupp.getSupplierName();
                         request.setAttribute("msg", msg);
