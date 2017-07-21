@@ -7,6 +7,7 @@ public class Stock implements Serializable {
 	private int stockId;
 	private double floorLvl, ceilLvl;
 	private String name, unit;
+	private int qty;
 
 	public Stock(){}
 
@@ -35,5 +36,7 @@ public class Stock implements Serializable {
 	public void setFloorLvl(double floorLvl) {this.floorLvl = floorLvl;}
 	public double getCeilLvl(){return ceilLvl;}
 	public void setCeilLvl(double ceilLvl){this.ceilLvl = ceilLvl;}
+	public int getQty(){return qty;}
+	public void setQty(int qty){this.qty = qty;}
 
 }

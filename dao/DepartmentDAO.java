@@ -190,13 +190,62 @@ public class DepartmentDAO {
 		return com;
 	}
 
+	public static Commissary getComById(int deptId){
+		Commissary com = null;
+		String sql = "SELECT COM_ID, COM_NAME, COM_ADDR FROM COMMISSARY WHERE COM_ID = ?;";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, deptId);
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()){
+				com = new Commissary(rs.getInt(1), rs.getString(2), rs.getString(3));
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			com = null;
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return com;
+	}
+
 	public static Branch getBrById(String deptId){
 		Branch br = null;
-		String sql = "SELECT BR_ID, BR_NAME, FROM BRANCH WHERE PASSWORD(BR_ID) = ?;";
+		String sql = "SELECT BR_ID, BR_NAME FROM BRANCH WHERE PASSWORD(BR_ID) = ?;";
 		Connection conn = DatabaseUtils.retrieveConnection();
 		try{
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, deptId);
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()){
+				br = new Branch();
+				br.setBranchId(rs.getInt(1));
+				br.setBranchName(rs.getString(2));
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return br;
+	}
+
+	public static Branch getBrById(int deptId){
+		Branch br = null;
+		String sql = "SELECT BR_ID, BR_NAME FROM BRANCH WHERE BR_ID = ?;";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, deptId);
 			ResultSet rs = pStmt.executeQuery();
 			while(rs.next()){
 				br = new Branch();
