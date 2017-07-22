@@ -441,45 +441,12 @@ DROP TABLE IF EXISTS `db_appdev_updated`.`com_monthly_inventory` ;
 CREATE TABLE IF NOT EXISTS `db_appdev_updated`.`com_monthly_inventory` (
   `com_inventory_id` INT NOT NULL AUTO_INCREMENT,
   `com_id` INT NOT NULL,
-  `stock_id` INT NOT NULL,
   `yearMonth` DATE NOT NULL,
-  `quantity` DOUBLE NOT NULL,
   `time_stamp` DATETIME NULL,
-  PRIMARY KEY (`com_inventory_id`, `com_id`, `stock_id`, `yearMonth`),
-  INDEX `fk_com_monthly_inventory_com_inventroy2_idx` (`stock_id` ASC),
+  PRIMARY KEY (`com_inventory_id`, `com_id`, `yearMonth`),
   CONSTRAINT `fk_com_monthly_inventory_com_inventroy1`
     FOREIGN KEY (`com_id`)
     REFERENCES `db_appdev_updated`.`com_inventory` (`com_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_com_monthly_inventory_com_inventroy2`
-    FOREIGN KEY (`stock_id`)
-    REFERENCES `db_appdev_updated`.`com_inventory` (`stock_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `db_appdev_updated`.`com_discrepancy`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `db_appdev_updated`.`com_discrepancy` ;
-
-CREATE TABLE IF NOT EXISTS `db_appdev_updated`.`com_discrepancy` (
-  `com_inventory_id` INT NOT NULL,
-  `stock_id` INT NOT NULL,
-  `quantity` DOUBLE NOT NULL,
-  `discrepancy_type` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`com_inventory_id`, `stock_id`),
-  INDEX `fk_com_discrepancy_com_monthly_inventory2_idx` (`stock_id` ASC),
-  CONSTRAINT `fk_com_discrepancy_com_monthly_inventory1`
-    FOREIGN KEY (`com_inventory_id`)
-    REFERENCES `db_appdev_updated`.`com_monthly_inventory` (`com_inventory_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_com_discrepancy_com_monthly_inventory2`
-    FOREIGN KEY (`stock_id`)
-    REFERENCES `db_appdev_updated`.`com_monthly_inventory` (`stock_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -528,6 +495,81 @@ CREATE TABLE IF NOT EXISTS `db_appdev_updated`.`br_deliveryDetails` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_br_deliveryDetails_stock1`
+    FOREIGN KEY (`stock_id`)
+    REFERENCES `db_appdev_updated`.`stock` (`stock_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `db_appdev_updated`.`purchase_order`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `db_appdev_updated`.`purchase_order` ;
+
+CREATE TABLE IF NOT EXISTS `db_appdev_updated`.`purchase_order` (
+  `po_id` INT NOT NULL AUTO_INCREMENT,
+  `com_id` INT NOT NULL,
+  `supplier_id` INT NOT NULL,
+  `creation_date` DATETIME NOT NULL,
+  PRIMARY KEY (`po_id`, `com_id`, `supplier_id`),
+  INDEX `fk_purchase_order_commissary1_idx` (`com_id` ASC),
+  INDEX `fk_purchase_order_supplier1_idx` (`supplier_id` ASC),
+  CONSTRAINT `fk_purchase_order_commissary1`
+    FOREIGN KEY (`com_id`)
+    REFERENCES `db_appdev_updated`.`commissary` (`com_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_purchase_order_supplier1`
+    FOREIGN KEY (`supplier_id`)
+    REFERENCES `db_appdev_updated`.`supplier` (`supplier_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `db_appdev_updated`.`po_details`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `db_appdev_updated`.`po_details` ;
+
+CREATE TABLE IF NOT EXISTS `db_appdev_updated`.`po_details` (
+  `po_id` INT NOT NULL,
+  `stock_id` INT NOT NULL,
+  `request_qty` DOUBLE NOT NULL,
+  PRIMARY KEY (`po_id`, `stock_id`),
+  INDEX `fk_po_details_stock1_idx` (`stock_id` ASC),
+  CONSTRAINT `fk_po_details_purchase_order1`
+    FOREIGN KEY (`po_id`)
+    REFERENCES `db_appdev_updated`.`purchase_order` (`po_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_po_details_stock1`
+    FOREIGN KEY (`stock_id`)
+    REFERENCES `db_appdev_updated`.`stock` (`stock_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `db_appdev_updated`.`monthly_details`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `db_appdev_updated`.`monthly_details` ;
+
+CREATE TABLE IF NOT EXISTS `db_appdev_updated`.`monthly_details` (
+  `com_inventory_id` INT NOT NULL,
+  `stock_id` INT NOT NULL,
+  `actual_qty` DOUBLE NOT NULL,
+  `discrepancy_qty` DOUBLE NOT NULL,
+  PRIMARY KEY (`com_inventory_id`, `stock_id`),
+  INDEX `fk_monthly_details_stock1_idx` (`stock_id` ASC),
+  CONSTRAINT `fk_monthly_details_com_monthly_inventory1`
+    FOREIGN KEY (`com_inventory_id`)
+    REFERENCES `db_appdev_updated`.`com_monthly_inventory` (`com_inventory_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_monthly_details_stock1`
     FOREIGN KEY (`stock_id`)
     REFERENCES `db_appdev_updated`.`stock` (`stock_id`)
     ON DELETE NO ACTION
@@ -594,7 +636,7 @@ INSERT INTO `db_appdev_updated`.`employee` (`emp_id`, `user_name`, `password`, `
 INSERT INTO `db_appdev_updated`.`employee` (`emp_id`, `user_name`, `password`, `first_name`, `last_name`, `user_type`, `is_active`, `is_employed`) VALUES (3, 'andrewsantiago', PASSWORD('andrewsantiago'), 'Andrew', 'Santiago', 102, 1, 1);
 INSERT INTO `db_appdev_updated`.`employee` (`emp_id`, `user_name`, `password`, `first_name`, `last_name`, `user_type`, `is_active`, `is_employed`) VALUES (4, 'xtianalderite', PASSWORD('xtianalderite'), 'Christian', 'Alderite', 103, 1, 1);
 INSERT INTO `db_appdev_updated`.`employee` (`emp_id`, `user_name`, `password`, `first_name`, `last_name`, `user_type`, `is_active`, `is_employed`) VALUES (5, 'rosedelapaz', PASSWORD('rosedelapaz'), 'Rossete', 'Dela Paz', 103, 1, 1);
-INSERT INTO `db_appdev_updated`.`employee` (`emp_id`, `user_name`, `password`, `first_name`, `last_name`, `user_type`, `is_active`, `is_employed`) VALUES (6, 'jinkazama', PASSWORD('jinkazama'), 'Jiin', 'Kazama', 102, 1, 1);
+INSERT INTO `db_appdev_updated`.`employee` (`emp_id`, `user_name`, `password`, `first_name`, `last_name`, `user_type`, `is_active`, `is_employed`) VALUES (6, 'jinkazama', PASSWORD('jinkazama'), 'Jin', 'Kazama', 102, 1, 1);
 
 COMMIT;
 
@@ -906,25 +948,6 @@ CREATE DEFINER = CURRENT_USER TRIGGER `db_appdev_updated`.`com_monthly_inventory
 BEGIN
 SET NEW.YEARMONTH = NOW();
 SET NEW.TIME_STAMP = NOW();
-END$$
-
-
-USE `db_appdev_updated`$$
-DROP TRIGGER IF EXISTS `db_appdev_updated`.`com_monthly_inventory_AFTER_INSERT` $$
-USE `db_appdev_updated`$$
-CREATE DEFINER = CURRENT_USER TRIGGER `db_appdev_updated`.`com_monthly_inventory_AFTER_INSERT` AFTER INSERT ON `com_monthly_inventory` FOR EACH ROW
-BEGIN
-DECLARE vDiff DOUBLE;
-SET vDiff = NEW.QUANTITY - (SELECT CURRENT_QTY FROM COM_INVENTORY WHERE COM_ID = NEW.COM_ID AND STOCK_ID = NEW.STOCK_ID);
-IF(vDiff > 0) THEN
-	INSERT INTO COM_DISCREPANCY VALUES (NEW.COM_INVENTORY_ID, NEW.STOCK_ID, vDiff, 'Surplus');
-END IF;
-IF(vDiff < 0) THEN
-	INSERT INTO COM_DISCREPANCY VALUES (NEW.COM_INVENTORY_ID, NEW.STOCK_ID, vDiff, 'Loose');
-END IF;
-
-UPDATE COM_INVENTORY SET CURRENT_INVENTORY = NEW.QUANTITY WHERE COM_ID = NEW.COM_ID AND STOCK_ID = NEW.STOCK_ID;
-
 END$$
 
 
