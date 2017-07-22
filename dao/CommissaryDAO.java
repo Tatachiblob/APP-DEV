@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import model.Branch;
+import model.Commissary;
 
 import model.Stock;
 import model.Supplier;
@@ -51,10 +52,36 @@ public class CommissaryDAO {
 		return branches;
 	}
         
+        public static Commissary getCommissaryofEmployee(int empID){
+		String sql = "SELECT C.com_id, C.com_name, C.com_addr FROM emp_com EC JOIN commissary C ON EC.com_id = C.com_id WHERE EC.emp_id = ?;";
+		Connection conn = DatabaseUtils.retrieveConnection();
+                Commissary thisCom = new Commissary();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+                        pStmt.setInt(1, empID);
+			ResultSet rs = pStmt.executeQuery();
+                        
+			while(rs.next()){
+				thisCom.setComId(rs.getInt(1));
+                                thisCom.setComName(rs.getString(2));
+                                thisCom.setComAddress(rs.getString(3));
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return thisCom;
+	}
+        
         public static ArrayList<Stock> getStocks(int empID){
 		ArrayList<Stock> stocks = new ArrayList<>();
                 String getCOM = "SELECT com_id FROM emp_com WHERE emp_id = ?;";
-		String sql = "SELECT CI.stock_id, CI.current_qty, S.stock_unit, S.stock_name FROM com_inventory CI JOIN stock S ON CI.stock_id = S.stock_id WHERE com_id = ?";
+		String sql = "SELECT CI.stock_id, CI.current_qty, S.ceil_level, S.floor_level, S.stock_unit, S.stock_name FROM com_inventory CI JOIN stock S ON CI.stock_id = S.stock_id WHERE com_id = ?;";
 		Connection conn = DatabaseUtils.retrieveConnection();
 		try{
                         //Get commissary ID
@@ -74,8 +101,42 @@ public class CommissaryDAO {
 				Stock thisStock = new Stock();
 				thisStock.setStockId(rs.getInt(1));
                                 thisStock.setQty(rs.getInt(2));
-                                thisStock.setUnit(rs.getString(3));
-                                thisStock.setName(rs.getString(4));
+                                thisStock.setCeilLvl(rs.getInt(3));
+                                thisStock.setFloorLvl(rs.getInt(4));
+                                thisStock.setUnit(rs.getString(5));
+                                thisStock.setName(rs.getString(6));
+				stocks.add(thisStock);
+			}
+                        
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return stocks;
+	}
+        
+        public static ArrayList<Stock> getStocksbyComID(int comID){
+		ArrayList<Stock> stocks = new ArrayList<>();
+		String sql = "SELECT CI.stock_id, CI.current_qty, S.ceil_level, S.floor_level, S.stock_name, S.stock_unit FROM com_inventory CI JOIN stock S ON CI.stocK_id = S.stock_id WHERE CI.com_id = ?;";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+                        //Get all stocks of PASSED BRANCH
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+                        pStmt.setInt(1, comID);
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()){
+				Stock thisStock = new Stock();
+				thisStock.setStockId(rs.getInt(1));
+                                thisStock.setQty(rs.getInt(2));
+                                thisStock.setCeilLvl(rs.getInt(3));
+                                thisStock.setFloorLvl(rs.getInt(4));
+                                thisStock.setName(rs.getString(5));
+                                thisStock.setUnit(rs.getString(6));
 				stocks.add(thisStock);
 			}
                         

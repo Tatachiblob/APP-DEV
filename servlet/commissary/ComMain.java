@@ -1,5 +1,6 @@
 package servlet.commissary;
 
+import dao.BranchDAO;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import model.Branch;
 
 @WebServlet("/ComMain")
 public class ComMain extends HttpServlet {
@@ -34,9 +36,12 @@ public class ComMain extends HttpServlet {
 			if(action.equals("receiveStock")){
 				forward = "WEB-INF/jsp/commissary/receiveStock.jsp";
 			}
-			if(action.equals("employees")){
-				//forward = "WEB-INF/jsp/admin/account.jsp";
+			if(action.equals("sendStock")){
+				forward = "WEB-INF/jsp/commissary/sendStock.jsp";
 			}
+                        if(action.equals("viewStockAvailability")){
+                                forward = "WEB-INF/jsp/commissary/viewStockAvailability.jsp";
+                        }
 		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forward);
 		dispatcher.forward(request, response);

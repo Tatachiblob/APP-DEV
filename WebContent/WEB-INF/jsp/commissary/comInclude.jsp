@@ -37,10 +37,11 @@
 				<a href="#"><i class="fa fa-fw fa-table"></i> Inventory Management<span class="fa arrow"></span></a>
 				<ul class="nav nav-second-level">
 					<li><a href="ComMain?action=receiveStock"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Receive Stock</a>
+                                        <li><a href="ComMain?action=sendStock"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Send Stock</a>
+                                        <li><a href="ComMain?action=viewStockAvailability"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> View Stock Availability</a>
 				</ul>
-                                <ul class="nav nav-second-level">
-					<li><a href="ComMain?action=sendStock"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Send Stock</a>
-				</ul>
+
+					
 			</li><!-- Inventory Drop Down -->
 			<li>
 			</li><!-- Reports Drop Down -->

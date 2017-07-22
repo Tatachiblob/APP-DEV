@@ -31,6 +31,9 @@ public class BranchMain extends HttpServlet {
 			if(action.equals("dashboard")){
 				forward = "WEB-INF/jsp/branch/index.jsp";
 			}
+                        if(action.equals("viewStockAvailability")){
+				forward = "WEB-INF/jsp/branch/viewStockAvailability.jsp";
+			}
 			RequestDispatcher dispatcher = request.getRequestDispatcher(forward);
 			dispatcher.forward(request, response);
 		}

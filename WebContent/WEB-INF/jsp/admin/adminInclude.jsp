@@ -2,7 +2,6 @@
 <%
     User test = (User) session.getAttribute("loginUser");
 %>
-
 <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0; background-color: #003d66;">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -14,7 +13,7 @@
 		<a style ="color:white;"class="navbar-brand" href="AdminMain?action=dashboard">Komoro Inventory System</a>
 	</div><!-- /.navbar-header -->
 	<ul class="nav navbar-top-links navbar-right">
-            <li style="color:white;"> <%= test.getFirstName() + " " + test.getLastName() %> </li>
+        <li style="color:white;"> <%= test.getFirstName() + " " + test.getLastName() %> </li>
 	<li class="dropdown">
 		<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 			<i style = "color: #ffa31a;" class="fa fa-user fa-fw"></i> <i style = "color: white;"class="fa fa-caret-down"></i>
@@ -60,6 +59,9 @@
 				<ul class="nav nav-second-level">
 					<li><a href="AdminMain?action=newInventory"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Add Inventory</a>
 					<li><a href="AdminMain?action=newSupplier"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Add Supplier</a>
+					<li><a href="AdminMain?action=reqOrders"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>View Recent Requisition</a></li>
+					<li><a href="AdminMain?action=receiveStock"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>Receive Stocks</a></li>
+                                        <li><a href="AdminMain?action=viewStockAvailability"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>View Stock Availability</a></li>
 				</ul>
 			</li><!-- Inventory Drop Down -->
 			<li>
