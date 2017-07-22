@@ -10,10 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import dao.DeliveryReceiptDAO;
+import dao.DepartmentDAO;
 import dao.StockDAO;
 import dao.SupplierDAO;
+import model.Inventory;
 import model.Stock;
 import model.Supplier;
+import model.User;
 
 @WebServlet("/ReceiveStockProcess")
 public class ReceiveStockProcess extends HttpServlet {
@@ -33,6 +37,7 @@ public class ReceiveStockProcess extends HttpServlet {
 			request.getRequestDispatcher("Login?action=Login");
 		}
 		else{
+			User loginUser = (User) session.getAttribute("loginUser");
 			String type = request.getParameter("type");
 			String message = "";
 			if(type.equals("changeSupplier")){
@@ -41,6 +46,28 @@ public class ReceiveStockProcess extends HttpServlet {
 				message = chosenSupplier.getSupplierName() + " chosen";
 				request.setAttribute("chosenSupplier", chosenSupplier);
 				request.setAttribute("supplierStock", supplierStock);
+				request.setAttribute("msg", message);
+			}
+			if(type.equals("receive")){
+				int supplierID = Integer.parseInt(request.getParameter("supplierID"));
+				int comID = DepartmentDAO.getComByUserId(loginUser.getEmpId()).getComId();
+				ArrayList<Stock> supplierStock = StockDAO.getStockFromSupplier(supplierID);
+				ArrayList<Inventory> deliveryDetails = new ArrayList<>();
+				for(Stock s : supplierStock){
+					double receiveQty = Double.parseDouble(request.getParameter("stock" + s.getStockId()));
+					if(receiveQty != 0){
+						Inventory i = new Inventory(s, receiveQty);
+						deliveryDetails.add(i);
+					}
+				}
+				if(DeliveryReceiptDAO.addNewDeliveryReceipt(supplierID, comID)){
+					int drId = DeliveryReceiptDAO.getLatestDrID();
+					DeliveryReceiptDAO.insertDeliveryDetails(drId, deliveryDetails);
+					message = "Successfully Received Stocks from Supplier";
+				}
+				else{
+					message = "Cannot Add Delivery Receipt Into System.";
+				}
 				request.setAttribute("msg", message);
 			}
 			request.getRequestDispatcher("WEB-INF/jsp/admin/stockReceive.jsp").forward(request, response);

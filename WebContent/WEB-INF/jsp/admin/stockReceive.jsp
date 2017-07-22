@@ -57,11 +57,12 @@ String msg = (String) request.getAttribute("msg");
 <%if(chosenSupplier != null){ %>
 <div class="row">
 	<div class="col-lg-12">
+		<form action="ReceiveStockProcess" method="post">
 		<div class="panel panel-default">
 			<div class="panel-heading"><%=chosenSupplier.getSupplierName() %> : Receive Stock</div>
 			<div class="panel-body">
-				<form action="ReceiveStockProcess" method="post">
-				<input type="hidden" name="" value="receive">
+				<input type="hidden" name="type" value="receive">
+				<input type="hidden" name="supplierID" value="<%=chosenSupplier.getSupplierId()%>">
 				<table width="100%" class="table table-striped table-bordered table-hover" id="supply">
 					<thead>
 						<tr>
@@ -74,22 +75,29 @@ String msg = (String) request.getAttribute("msg");
 						<%for(Stock s : supplierStocks){ %>
 						<tr>
 							<td><%=s.getName() %></td>
-							<td></td>
+							<td><input type="number" class="form-control" name="stock<%=s.getStockId()%>" min="0" step="0.01" value="0"></td>
 							<td><%=s.getUnit() %></td>
 						</tr>
 						<%} %>
 					</tbody>
 				</table>
-				</form>
 			</div><!-- /.panel-body -->
 			<div class="panel-footer">
-				<input type="submit" value="Receive Stock">
-			</div>
+				<input type="submit" class="btn btn-success btn-block" value="Receive Stock">
+			</div><!-- /.panel-footer -->
 		</div><!-- /.panel panel-default -->
+		</form>
 	</div><!-- /.col-lg-12 -->
 </div><!-- /.row -->
 	<%}//If chosen not null %>
 </div><!-- /#page-wrapper -->
 </div><!-- /#wrapper -->
 </body>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#supply').DataTable({
+		responsive : true
+	});
+});
+</script>
 </html>

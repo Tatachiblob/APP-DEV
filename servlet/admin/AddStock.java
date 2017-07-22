@@ -40,17 +40,22 @@ public class AddStock extends HttpServlet {
 			String msg = "";
 			Stock newStock = new Stock(prodname, sku, flrlvl, ceilLvl);
 			Supplier supplier = SupplierDAO.getSupplierById(supplierId);
-			if(StockDAO.addNewStock(newStock)){
-				newStock = StockDAO.getStockByName(prodname);
-				if(StockDAO.assignSupplier(supplier, newStock)){
-					msg = "Stock Added and Assigned to a supplier";
-				}
-				else{
-					msg = "Stock Added but failed to be assigned to a supplier";
-				}
+			if(flrlvl >= ceilLvl){
+				msg = "Unable to Add New Stock : Floor Level cannot be grater than Ceil Level";
 			}
 			else{
-				msg = "Unable to add new stock information";
+				if(StockDAO.addNewStock(newStock)){
+					newStock = StockDAO.getStockByName(prodname);
+					if(StockDAO.assignSupplier(supplier, newStock)){
+						msg = "Stock Added and Assigned to a supplier";
+					}
+					else{
+						msg = "Stock Added but failed to be assigned to a supplier";
+					}
+				}
+				else{
+					msg = "Unable to add new stock information";
+				}
 			}
 			request.setAttribute("msg", msg);
 			request.getRequestDispatcher("WEB-INF/jsp/admin/addStock.jsp").forward(request, response);
