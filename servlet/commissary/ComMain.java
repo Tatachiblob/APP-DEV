@@ -42,6 +42,9 @@ public class ComMain extends HttpServlet {
                         if(action.equals("viewStockAvailability")){
                                 forward = "WEB-INF/jsp/commissary/viewStockAvailability.jsp";
                         }
+                        if(action.equals("endingInventory")){
+                                forward = "WEB-INF/jsp/commissary/endingInventory.jsp";
+                        }
 		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forward);
 		dispatcher.forward(request, response);

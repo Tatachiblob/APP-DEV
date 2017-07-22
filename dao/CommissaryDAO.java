@@ -78,6 +78,83 @@ public class CommissaryDAO {
 		return thisCom;
 	}
         
+        public static int getMaxCommissaryInventoryID(){
+		String sql = "SELECT MAX(COM_INVENTORY_ID) FROM COM_MONTHLY_INVENTORY";
+		Connection conn = DatabaseUtils.retrieveConnection();
+                int i = 0;
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			ResultSet rs = pStmt.executeQuery();
+                        
+			while(rs.next()){
+				i = rs.getInt(1);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return i + 1;
+	}
+        
+        public static boolean inventoryCount(int comID){
+                boolean hasUpdated = false;
+		String sql = "INSERT INTO COM_MONTHLY_INVENTORY (COM_ID) VALUES(?);";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+                        pStmt.setInt(1, comID);
+			hasUpdated = pStmt.execute();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return hasUpdated;
+	}
+        
+        public static boolean inventoryCountItems(int cominvID, int stockID, int qty, int dqty, int adjustqty, int comID){
+                boolean hasUpdated = false;
+		String sql = "INSERT INTO MONTHLY_DETAILS VALUES(?,?,?,?);";
+                String sqlcomInv = "UPDATE COM_INVENTORY SET CURRENT_QTY = ? WHERE STOCK_ID = ? AND COM_ID = ?;";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+                        //Make changes monthly details table
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+                        pStmt.setInt(1, cominvID);
+                        pStmt.setInt(2, stockID);
+                        pStmt.setInt(3, qty);
+                        pStmt.setInt(4, dqty);
+                        
+			hasUpdated = pStmt.execute();
+                        
+                        //Make changes to com inventory table
+                        pStmt = conn.prepareStatement(sqlcomInv);
+                        pStmt.setInt(1, adjustqty);
+                        pStmt.setInt(2, stockID);
+                        pStmt.setInt(3, comID);
+                        
+                        hasUpdated = pStmt.execute();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return hasUpdated;
+	}
+        
         public static ArrayList<Stock> getStocks(int empID){
 		ArrayList<Stock> stocks = new ArrayList<>();
                 String getCOM = "SELECT com_id FROM emp_com WHERE emp_id = ?;";
@@ -255,4 +332,6 @@ public class CommissaryDAO {
 		}
         return drID;
         }
+        
+        
 }
