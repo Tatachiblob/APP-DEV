@@ -5,10 +5,101 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import model.Branch;
 import model.Inventory;
 import model.InventoryStatus;
 
 public class CustomDAO {
+
+	public static boolean addNewComDR(int comId, int brId){
+		boolean isAdded = false;
+		String sql = "INSERT INTO COMMISSARY_DR(COM_DR_ID, COM_ID, DESTINATION_BR, CREATION_DATE) VALUES (0, ?, ?, 0);";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, comId);
+			pStmt.setInt(2, brId);
+			if(pStmt.executeUpdate() != 0){
+				isAdded = true;
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return isAdded;
+	}
+
+	public static int getLatestComDR(){
+		int comDrId = -1;
+		String sql = "SELECT MAX(COM_DR_ID) FROM COMMISSARY_DR;";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()){
+				comDrId = rs.getInt(1);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return comDrId;
+	}
+
+	public static void insertComDRDetails(int comDrId, ArrayList<Inventory> deliveryDetails){
+		String sql = "INSERT INTO COM_DRDETAILS(COM_DR_ID, STOCK_ID, DELIVER_QTY) VALUES (?, ?, ?);";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, comDrId);
+			for(Inventory i : deliveryDetails){
+				pStmt.setInt(2, i.getStock().getStockId());
+				pStmt.setDouble(3, i.getQuantity());
+				int result = pStmt.executeUpdate();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+	}
+
+	public static ArrayList<Branch> getBranchByComID(int comId){
+		ArrayList<Branch> branches = new ArrayList<>();
+		String sql = "SELECT B.BR_ID FROM BRANCH B JOIN COMMISSARY C ON B.COM_ID = C.COM_ID WHERE C.COM_ID = ?;";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, comId);
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()){
+				branches.add(DepartmentDAO.getBrById(rs.getInt(1)));
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return branches;
+	}
 
 	public static ArrayList<InventoryStatus> getComInventoryStatus(int comId){
 		ArrayList<InventoryStatus> stats = new ArrayList<>();
@@ -113,8 +204,8 @@ public class CustomDAO {
 				pStmt.setInt(2, i.getStock().getStockId());
 				pStmt.setDouble(3, i.getQuantity());
 				if(pStmt.executeUpdate() != 0)
-					count++;
-			}
+						count++;
+				}
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
@@ -127,6 +218,6 @@ public class CustomDAO {
 		if(count == endingInventory.size())
 			isAdded = true;
 		return isAdded;
-	}
+		}
 
 }

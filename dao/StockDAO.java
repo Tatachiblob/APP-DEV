@@ -64,6 +64,29 @@ public class StockDAO {
 		return stox;
 	}
 
+	public static ArrayList<Inventory> getComInventory(int comId){
+		ArrayList<Inventory> inventory = new ArrayList<>();
+		String sql = "SELECT S.STOCK_ID, CI.CURRENT_QTY FROM COM_INVENTORY AS CI JOIN STOCK AS S ON CI.STOCK_ID = S.STOCK_ID WHERE CI.COM_ID = ?;";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, comId);
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()){
+				inventory.add(new Inventory(getStockById(rs.getInt(1)), rs.getDouble(2)));
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return inventory;
+	}
+
 	public static ArrayList<Inventory> getBranchInventory(int brId){
 		ArrayList<Inventory> inventory = new ArrayList<>();
 		String sql = "SELECT S.STOCK_NAME, BI.CURRENT_QTY FROM BR_INVENTORY AS BI JOIN STOCK AS S ON BI.STOCK_ID = S.STOCK_ID WHERE BI.BR_ID = ?;";
@@ -182,5 +205,4 @@ public class StockDAO {
     	}
     	return isAssigned;
     }
-
 }
