@@ -55,9 +55,10 @@
 				<ul class="nav nav-second-level">
 					<li><a href="AdminMain?action=newInventory"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Add Inventory</a>
 					<li><a href="AdminMain?action=newSupplier"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Add Supplier</a>
-					<li><a href="AdminMain?action=reqOrders"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>View Recent Requisition</a></li>
-					<li><a href="AdminMain?action=receiveStock"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>Receive Stocks</a></li>
-					<li><a href="AdminMain?action=sendStock"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>Send Stocks</a></li>
+					<li><a href="AdminMain?action=viewStocks"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> View Stock Availability</a>
+					<li><a href="AdminMain?action=reqOrders"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> View Recent Requisition</a></li>
+					<li><a href="AdminMain?action=receiveStock"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Receive Stocks</a></li>
+					<li><a href="AdminMain?action=sendStock"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Send Stocks</a></li>
 				</ul>
 			</li><!-- Inventory Drop Down -->
 			<li>

@@ -6,6 +6,7 @@ public class Inventory implements Serializable {
 
 	private Stock stock;
 	private double quantity;
+	private String status;
 
 	public Inventory(){}
 
@@ -18,5 +19,7 @@ public class Inventory implements Serializable {
 	public void setStock(Stock stock) {this.stock = stock;}
 	public double getQuantity() {return quantity;}
 	public void setQuantity(double quantity) {this.quantity = quantity;}
+	public String getStatus(){return status;}
+	public void setStatus(String status){this.status = status;}
 
 }

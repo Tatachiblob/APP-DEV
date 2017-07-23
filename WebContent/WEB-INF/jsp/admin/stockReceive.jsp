@@ -57,7 +57,7 @@ String msg = (String) request.getAttribute("msg");
 <%if(chosenSupplier != null){ %>
 <div class="row">
 	<div class="col-lg-12">
-		<form action="ReceiveStockProcess" method="post">
+		<form action="ReceiveStockProcess" method="post" id="mainForm">
 		<div class="panel panel-default">
 			<div class="panel-heading"><%=chosenSupplier.getSupplierName() %> : Receive Stock</div>
 			<div class="panel-body">
@@ -75,7 +75,7 @@ String msg = (String) request.getAttribute("msg");
 						<%for(Stock s : supplierStocks){ %>
 						<tr>
 							<td><%=s.getName() %></td>
-							<td><input type="number" class="form-control" name="stock<%=s.getStockId()%>" min="0" step="0.01" value="0"></td>
+							<td><input type="number" class="form-control" name="stock<%=s.getStockId()%>" id="stock<%=s.getStockId()%>" min="0" step="0.01" placeholder="0" value="0"></td>
 							<td><%=s.getUnit() %></td>
 						</tr>
 						<%} %>
@@ -83,7 +83,8 @@ String msg = (String) request.getAttribute("msg");
 				</table>
 			</div><!-- /.panel-body -->
 			<div class="panel-footer">
-				<input type="submit" class="btn btn-success btn-block" value="Receive Stock">
+				<button type="button" class="btn btn-block btn-success" onclick="openModal()" >Receive Stocks</button>
+				<input type="reset" class="btn btn-warning btn-block" value="Reset Numbers">
 			</div><!-- /.panel-footer -->
 		</div><!-- /.panel panel-default -->
 		</form>
@@ -92,6 +93,25 @@ String msg = (String) request.getAttribute("msg");
 	<%}//If chosen not null %>
 </div><!-- /#page-wrapper -->
 </div><!-- /#wrapper -->
+<!-- Modal Content -->
+<div class="modal fade" id="myModal" role="dialog">
+	<div class="modal-dialog modal-dialog-center">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Confim Changes</h4>
+			</div><!-- /.modal-header -->
+			<div class="modal-body">
+				<center>
+					<h4>Are you sure you want to proceed?</h4>
+					<input type="submit" name="submit" value="Yes" class="btn btn-info" data-toggle="modal" data-target="#myModal" form="mainForm">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+				</center>
+			</div><!-- /.modal-body -->
+		</div><!-- modal-content -->
+	</div><!-- /.modal-dialog modal-dialog-center -->
+</div><!-- /.modal -->
+<!-- End of Modal Content -->
 </body>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -99,5 +119,9 @@ $(document).ready(function(){
 		responsive : true
 	});
 });
+
+function openModal(){
+	$('#myModal').modal();
+}
 </script>
 </html>

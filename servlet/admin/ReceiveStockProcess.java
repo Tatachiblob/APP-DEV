@@ -49,24 +49,46 @@ public class ReceiveStockProcess extends HttpServlet {
 				request.setAttribute("msg", message);
 			}
 			if(type.equals("receive")){
+				boolean qtyTest = true;
 				int supplierID = Integer.parseInt(request.getParameter("supplierID"));
 				int comID = DepartmentDAO.getComByUserId(loginUser.getEmpId()).getComId();
 				ArrayList<Stock> supplierStock = StockDAO.getStockFromSupplier(supplierID);
 				ArrayList<Inventory> deliveryDetails = new ArrayList<>();
-				for(Stock s : supplierStock){
-					double receiveQty = Double.parseDouble(request.getParameter("stock" + s.getStockId()));
-					if(receiveQty != 0){
-						Inventory i = new Inventory(s, receiveQty);
-						deliveryDetails.add(i);
+				for(int i = 0; i < supplierStock.size(); i++){
+					if(request.getParameter("stock" + supplierStock.get(i).getStockId()) == null){
+						message = "Invalid Input. Empty input detected.";
+						qtyTest = false;
+						i = supplierStock.size() + 1;
+					}
+					else{
+						double receiveQty = Double.parseDouble(request.getParameter("stock" + supplierStock.get(i).getStockId()));
+						if(receiveQty < 0){
+							message = "Receiving Quantity Cannot be lower than 0";
+							qtyTest = false;
+							i = supplierStock.size() + 1;
+						}
+						else{
+							if(receiveQty != 0){
+								Inventory in = new Inventory(supplierStock.get(i), receiveQty);
+								deliveryDetails.add(in);
+							}
+						}
 					}
 				}
-				if(DeliveryReceiptDAO.addNewDeliveryReceipt(supplierID, comID)){
-					int drId = DeliveryReceiptDAO.getLatestDrID();
-					DeliveryReceiptDAO.insertDeliveryDetails(drId, deliveryDetails);
-					message = "Successfully Received Stocks from Supplier";
-				}
-				else{
-					message = "Cannot Add Delivery Receipt Into System.";
+				if(qtyTest){
+					if(deliveryDetails.size() != 0){
+						if(DeliveryReceiptDAO.addNewDeliveryReceipt(supplierID, comID)){
+							int drId = DeliveryReceiptDAO.getLatestDrID();
+							DeliveryReceiptDAO.insertDeliveryDetails(drId, deliveryDetails);
+							message = "Successfully Received Stocks from Supplier";
+						}
+						else{
+							message = "Cannot Add Delivery Receipt Into System.";
+						}
+					}
+					else{
+						message = "Delivery Details Content is Empty. Did not receive any stocks.";
+					}
 				}
 				request.setAttribute("msg", message);
 			}

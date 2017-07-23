@@ -81,7 +81,7 @@ ArrayList<Inventory> comInventory = (ArrayList<Inventory>) request.getAttribute(
 				</table><!-- /#myTable -->
 			</div><!-- /.panel-body -->
 			<div class="panel-footer">
-				<button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#myModal" >Send Stocks</button>
+				<button type="button" class="btn btn-block btn-success" onclick="openModal()">Send Stocks</button>
 				<input type="reset" value="Reset Values" class="btn btn-block btn-warning">
 			</div><!-- /.panel-footer -->
 			</form>
@@ -100,7 +100,7 @@ ArrayList<Inventory> comInventory = (ArrayList<Inventory>) request.getAttribute(
 			<div class="modal-body">
 				<center>
 					<h4>Are you sure you want to proceed?</h4>
-					<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" onclick="finalSubmitFunction()">Yes</button>
+					<input type="submit" name="submit" value="Yes" class="btn btn-info" data-toggle="modal" data-target="#myModal" form="mainForm">
 					<button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
 				</center>
 			</div><!-- /.modal-body -->
@@ -119,6 +119,10 @@ $(document).ready(function(){
 		responsive: true
 	});
 });
+
+function openModal(){
+	$('#myModal').modal();
+}
 
 function finalSubmitFunction(){
 	document.getElementById("mainForm").submit();

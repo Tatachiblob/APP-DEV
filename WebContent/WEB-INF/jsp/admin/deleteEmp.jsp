@@ -34,7 +34,7 @@ String fullName = editUser.getFirstName() + ", " + editUser.getLastName();
 			<div class="panel-body">
 				<div class="row">
 					<div class="col-lg-6">
-						<form action="Delete" method="post">
+						<form action="Delete" method="post" id="mainForm">
 							<input type="hidden" name="empId" value="<%=editUser.getEmpId()%>">
 							<input type="hidden" name="empType" value="<%=editUser.getUserType() %>">
 							<fieldset disabled>
@@ -43,7 +43,7 @@ String fullName = editUser.getFirstName() + ", " + editUser.getLastName();
 									<input class="form-control" type="text" placeholder="<%=fullName%>" disabled>
 								</div>
 							</fieldset>
-							<input type="submit" class="btn btn-danger" value="Delete">
+							<button type="button" class="btn btn-success"  onclick="openModal()">Delete Employee</button>
 						</form>
 					</div><!-- /.col-lg-6 -->
 				</div><!-- /.row -->
@@ -53,5 +53,28 @@ String fullName = editUser.getFirstName() + ", " + editUser.getLastName();
 </div><!-- /.row -->
 </div><!-- /#page-wrapper -->
 </div><!-- /#wrapper -->
+<div class="modal fade" id="myModal" role="dialog">
+	<div class="modal-dialog modal-dialog-center">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Confim Changes</h4>
+			</div><!-- /.modal-header -->
+			<div class="modal-body">
+				<center>
+					<h4>Are you sure you want to proceed?</h4>
+					<input type="submit" name="submit" value="Yes" class="btn btn-info" data-toggle="modal" data-target="#myModal" form="mainForm">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+				</center>
+			</div><!-- /.modal-body -->
+		</div><!-- modal-content -->
+	</div><!-- /.modal-dialog modal-dialog-center -->
+</div><!-- /.modal -->
+<!-- End of Modal Content -->
 </body>
+<script type="text/javascript">
+function openModal(){
+	$('#myModal').modal();
+}
+</script>
 </html>

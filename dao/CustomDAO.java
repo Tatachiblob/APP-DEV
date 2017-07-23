@@ -11,6 +11,37 @@ import model.InventoryStatus;
 
 public class CustomDAO {
 
+	public static ArrayList<Inventory> getCurrentComInventory(int comId){
+		ArrayList<Inventory> comInventory = new ArrayList<>();
+		String sql = "SELECT C.COM_ID, S.STOCK_ID, CI.CURRENT_QTY, "
+				  + " CASE "
+				  + " WHEN CI.CURRENT_QTY = 0 THEN 'Out of Stock' WHEN CI.CURRENT_QTY > 0 AND CI.CURRENT_QTY <= S.FLOOR_LEVEL THEN 'Low In Stock' WHEN CI.CURRENT_QTY > S.FLOOR_LEVEL AND CI.CURRENT_QTY <= S.CEIL_LEVEL THEN 'In Stock' WHEN CI.CURRENT_QTY > S.CEIL_LEVEL THEN 'Over Stock' "
+				  + " END AS STOCK_STATUS "
+				  + " FROM COM_INVENTORY AS CI JOIN STOCK AS S ON CI.STOCK_ID = S.STOCK_ID JOIN COMMISSARY AS C ON CI.COM_ID = C.COM_ID WHERE CI.COM_ID = ?;";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, comId);
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()){
+				Inventory i = new Inventory();
+				i.setStock(StockDAO.getStockById(rs.getInt(2)));
+				i.setQuantity(rs.getDouble(3));
+				i.setStatus(rs.getString(4));
+				comInventory.add(i);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return comInventory;
+	}
+
 	public static boolean addNewComDR(int comId, int brId){
 		boolean isAdded = false;
 		String sql = "INSERT INTO COMMISSARY_DR(COM_DR_ID, COM_ID, DESTINATION_BR, CREATION_DATE) VALUES (0, ?, ?, 0);";
@@ -220,4 +251,13 @@ public class CustomDAO {
 		return isAdded;
 		}
 
+	public static void main(String[] args){
+		System.out.println("Hellow World");
+		for(Inventory i : getCurrentComInventory(1000)){
+			System.out.println("Stock: " + i.getStock().getName());
+			System.out.println("Qty: " + i.getQuantity() + "" + i.getStock().getUnit());
+			System.out.println("Status: " + i.getStatus());
+		}
+		System.out.println("Good Bye World");
+	}
 }

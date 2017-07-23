@@ -55,6 +55,9 @@ public class AdminMain extends HttpServlet {
 			if(action.equals("reqOrders")){
 				forward = "WEB-INF/jsp/admin/viewRequisitionOrder.jsp";
 			}
+			if(action.equals("viewStocks")){
+				forward = "WEB-INF/jsp/admin/viewStockAvailability.jsp";
+			}
 			if(action.equals("receiveStock")){
 				forward = "WEB-INF/jsp/admin/stockReceive.jsp";
 			}
