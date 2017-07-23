@@ -87,6 +87,34 @@ public class EmployeeDAO {
 		return isAdded;
 	}
 
+	public static User getEmpById(int empId){
+		User emp = null;
+		String sql = "SELECT EMP_ID, USER_NAME, FIRST_NAME, LAST_NAME, USER_TYPE, IS_ACTIVE, IS_EMPLOYED FROM EMPLOYEE WHERE EMP_ID = ? AND IS_EMPLOYED = TRUE;";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, empId);
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()){
+				emp = new User();
+				emp.setEmpId(rs.getInt(1));
+				emp.setUserName(rs.getString(2));
+				emp.setFirstName(rs.getString(3));
+				emp.setLastName(rs.getString(4));
+				emp.setUserType(rs.getInt(5));
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return emp;
+	}
+
 	public static int getEmpID(String userName){
 		int empId = -1;
 		String sql = "SELECT EMP_ID FROM EMPLOYEE WHERE USER_NAME = ? AND IS_EMPLOYED = TRUE;";
@@ -248,6 +276,28 @@ public class EmployeeDAO {
 			}
 		}
 		return isChanged;
+	}
+
+	public static boolean deleteEmployee(int empId){
+		boolean isDeleted = false;
+		String sql = "UPDATE EMPLOYEE SET IS_EMPLOYED = FALSE WHERE EMP_ID = ?";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, empId);
+			if(pStmt.executeUpdate() != 0){
+				isDeleted = true;
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return isDeleted;
 	}
 
 }

@@ -5,10 +5,132 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import model.Branch;
 import model.Inventory;
 import model.InventoryStatus;
 
 public class CustomDAO {
+
+	public static ArrayList<Inventory> getCurrentComInventory(int comId){
+		ArrayList<Inventory> comInventory = new ArrayList<>();
+		String sql = "SELECT C.COM_ID, S.STOCK_ID, CI.CURRENT_QTY, "
+				  + " CASE "
+				  + " WHEN CI.CURRENT_QTY = 0 THEN 'Out of Stock' WHEN CI.CURRENT_QTY > 0 AND CI.CURRENT_QTY <= S.FLOOR_LEVEL THEN 'Low In Stock' WHEN CI.CURRENT_QTY > S.FLOOR_LEVEL AND CI.CURRENT_QTY <= S.CEIL_LEVEL THEN 'In Stock' WHEN CI.CURRENT_QTY > S.CEIL_LEVEL THEN 'Over Stock' "
+				  + " END AS STOCK_STATUS "
+				  + " FROM COM_INVENTORY AS CI JOIN STOCK AS S ON CI.STOCK_ID = S.STOCK_ID JOIN COMMISSARY AS C ON CI.COM_ID = C.COM_ID WHERE CI.COM_ID = ?;";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, comId);
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()){
+				Inventory i = new Inventory();
+				i.setStock(StockDAO.getStockById(rs.getInt(2)));
+				i.setQuantity(rs.getDouble(3));
+				i.setStatus(rs.getString(4));
+				comInventory.add(i);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return comInventory;
+	}
+
+	public static boolean addNewComDR(int comId, int brId){
+		boolean isAdded = false;
+		String sql = "INSERT INTO COMMISSARY_DR(COM_DR_ID, COM_ID, DESTINATION_BR, CREATION_DATE) VALUES (0, ?, ?, 0);";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, comId);
+			pStmt.setInt(2, brId);
+			if(pStmt.executeUpdate() != 0){
+				isAdded = true;
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return isAdded;
+	}
+
+	public static int getLatestComDR(){
+		int comDrId = -1;
+		String sql = "SELECT MAX(COM_DR_ID) FROM COMMISSARY_DR;";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()){
+				comDrId = rs.getInt(1);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return comDrId;
+	}
+
+	public static void insertComDRDetails(int comDrId, ArrayList<Inventory> deliveryDetails){
+		String sql = "INSERT INTO COM_DRDETAILS(COM_DR_ID, STOCK_ID, DELIVER_QTY) VALUES (?, ?, ?);";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, comDrId);
+			for(Inventory i : deliveryDetails){
+				pStmt.setInt(2, i.getStock().getStockId());
+				pStmt.setDouble(3, i.getQuantity());
+				int result = pStmt.executeUpdate();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+	}
+
+	public static ArrayList<Branch> getBranchByComID(int comId){
+		ArrayList<Branch> branches = new ArrayList<>();
+		String sql = "SELECT B.BR_ID FROM BRANCH B JOIN COMMISSARY C ON B.COM_ID = C.COM_ID WHERE C.COM_ID = ?;";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, comId);
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()){
+				branches.add(DepartmentDAO.getBrById(rs.getInt(1)));
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return branches;
+	}
 
 	public static ArrayList<InventoryStatus> getComInventoryStatus(int comId){
 		ArrayList<InventoryStatus> stats = new ArrayList<>();
@@ -113,8 +235,8 @@ public class CustomDAO {
 				pStmt.setInt(2, i.getStock().getStockId());
 				pStmt.setDouble(3, i.getQuantity());
 				if(pStmt.executeUpdate() != 0)
-					count++;
-			}
+						count++;
+				}
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
@@ -127,6 +249,15 @@ public class CustomDAO {
 		if(count == endingInventory.size())
 			isAdded = true;
 		return isAdded;
-	}
+		}
 
+	public static void main(String[] args){
+		System.out.println("Hellow World");
+		for(Inventory i : getCurrentComInventory(1000)){
+			System.out.println("Stock: " + i.getStock().getName());
+			System.out.println("Qty: " + i.getQuantity() + "" + i.getStock().getUnit());
+			System.out.println("Status: " + i.getStatus());
+		}
+		System.out.println("Good Bye World");
+	}
 }

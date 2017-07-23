@@ -15,7 +15,7 @@ String msg = (String) request.getAttribute("msg");
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
-<%@ include file="../../styleinclude.jsp" %>
+<%@ include file="../../../styleinclude.jsp" %>
 </head>
 <body>
 <p>Hello <%=loginUser.getFirstName() + ", " + loginUser.getLastName()%>. Please change your password to activate your account.</p>

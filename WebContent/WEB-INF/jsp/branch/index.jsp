@@ -3,6 +3,7 @@
 <%@ page import="model.User" %>
 <%
 User loginUser = (User) session.getAttribute("loginUser");
+String msg2 = (String) request.getAttribute("msg");
 %>
 <!DOCTYPE html>
 <%if(!loginUser.getIsEmployed()){ %>
@@ -44,12 +45,38 @@ request.setAttribute("msg", msg);
 		</div>
 	</div>
 </div><!-- /.row -->
+<% if(msg2 != null){ %>
 <div class="row">
 	<div class="col-lg-12">
 		<div class="alert alert-info alert-dismissable">
-			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><i class="fa fa-info-circle"></i>  <strong>Hello, <%= loginUser.getIsActive() + " " + loginUser.getIsEmployed() %>.</strong>
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><i class="fa fa-info-circle"></i>  <strong><%= msg2%></strong>
 		</div>
 	</div>
+</div><!-- /.row -->
+<% } %>
+<div class="row">
+	<div class="col-lg-3 col-md-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-xs-3">
+						<i class="fa fa-users fa-5x"></i>
+					</div>
+					<div class="col-xs-9 text-right">
+						<div style="font-size:30px;">Requisition Order</div>
+					</div>
+				</div>
+			</div>
+			<a href="BranchMain?action=requisition">
+			<!--<a href="AdminMain?action=employees">-->
+				<div class="panel-footer">
+					<span class="pull-left">View Details</span>
+					<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+					<div class="clearfix"></div>
+				</div>
+			</a>
+		</div>
+	</div><!-- Users/Departments Panel -->
 </div><!-- /.row -->
 </div><!-- /#page-wrapper -->
 </div><!-- /#wrapper -->

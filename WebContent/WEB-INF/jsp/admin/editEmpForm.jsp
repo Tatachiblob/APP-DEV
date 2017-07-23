@@ -36,7 +36,7 @@ ArrayList<Branch> branches = DepartmentDAO.getAllBranch();
 			<div class="panel-body">
 				<div class="row">
 					<div class="col-lg-6">
-						<form action="EditEmp" method="post">
+						<form action="EditEmp" method="post" id="mainForm">
 							<div class="form-group">
 								<label>Username</label>
 								<input type="hidden" name="empId" value="<%=editUser.getEmpId()%>">
@@ -45,7 +45,11 @@ ArrayList<Branch> branches = DepartmentDAO.getAllBranch();
 							</div>
 							<div class="form-group">
 								<label>New Password</label>
-								<input type="password" name="password" class="form-control" placeholder="new password" required>
+								<input type="password" name="password" class="form-control" placeholder="new password" required id="p1">
+							</div>
+							<div class="form-group">
+								<label>Confirm Password</label>
+								<input type="password" name="password2" class="form-control" placeholder="confirm password" required id="p2">
 							</div>
 							<div class="form-group">
 								<label>First Name</label>
@@ -89,7 +93,7 @@ ArrayList<Branch> branches = DepartmentDAO.getAllBranch();
 								</select>
 							</fieldset>
 							</div>
-							<input type="submit" class="btn btn-primary" value="Submit">
+							<button type="button" class="btn btn-success"  onclick="checkPassword()">Submit</button>
 							<input type="reset" class="btn btn-warning" value="Reset">
 						</form>
 					</div><!-- /.col-lg-6 -->
@@ -100,6 +104,25 @@ ArrayList<Branch> branches = DepartmentDAO.getAllBranch();
 </div><!-- /.row -->
 </div><!-- /#page-wrapper -->
 </div><!-- /#wrapper -->
+<!-- Modal Content -->
+<div class="modal fade" id="myModal" role="dialog">
+	<div class="modal-dialog modal-dialog-center">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Confim Changes</h4>
+			</div><!-- /.modal-header -->
+			<div class="modal-body">
+				<center>
+					<h4>Are you sure you want to proceed?</h4>
+					<input type="submit" name="submit" value="Yes" class="btn btn-info" data-toggle="modal" data-target="#myModal" form="mainForm">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+				</center>
+			</div><!-- /.modal-body -->
+		</div><!-- modal-content -->
+	</div><!-- /.modal-dialog modal-dialog-center -->
+</div><!-- /.modal -->
+<!-- End of Modal Content -->
 </body>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -121,5 +144,16 @@ $(document).ready(function(){
 	}
 	checkradiobox();
 });
+
+function checkPassword(){
+	var p1 = document.getElementById('p1').value;
+	var p2 = document.getElementById('p2').value;
+	if(p1 != p2){
+		alert("The 2nd password input does not match with the 1st password input");
+	}
+	else{
+		$('#myModal').modal();
+	}
+}
 </script>
 </html>

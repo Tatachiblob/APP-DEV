@@ -64,6 +64,9 @@ ArrayList<Commissary> allCom = DepartmentDAO.getAllCommissary();
 					</tbody>
 				</table>
 			</div><!-- /.panel-body -->
+			<div class="panel-footer">
+				--- End of Contents ---
+			</div><!-- /.panel-footer -->
 		</div><!-- /.panel panel-default -->
 	</div><!-- /.col-lg-12 -->
 </div><!-- /.row -->
