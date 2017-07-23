@@ -52,24 +52,15 @@ public class AdminMain extends HttpServlet {
 			if(action.equals("viewDept")){
 				forward = "WEB-INF/jsp/admin/viewDept.jsp";
 			}
-			if(action.equals("reqOrders")){
-				forward = "WEB-INF/jsp/admin/viewRequisitionOrder.jsp";
-			}
-			if(action.equals("viewStocks")){
-				forward = "WEB-INF/jsp/admin/viewStockAvailability.jsp";
-			}
-			if(action.equals("receiveStock")){
-				forward = "WEB-INF/jsp/admin/stockReceive.jsp";
-			}
-			if(action.equals("sendStock")){
-				forward = "WEB-INF/jsp/admin/sendStock.jsp";
-			}
 			if(action.equals("newInventory")){
 				forward = "WEB-INF/jsp/admin/addStock.jsp";
 			}
 			if(action.equals("newSupplier")){
 				forward = "WEB-INF/jsp/admin/newSupplier.jsp";
 			}
+                        if(action.equals("viewStockAvailability")){
+                                forward = "WEB-INF/jsp/admin/viewStockAvailability.jsp";
+                        }
 		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forward);
 		dispatcher.forward(request, response);

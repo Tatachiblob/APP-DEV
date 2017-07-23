@@ -1,3 +1,7 @@
+<%@page import="model.User"%>
+<%
+    User test = (User) session.getAttribute("loginUser");
+%>
 <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0; background-color: #003d66;">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -9,7 +13,7 @@
 		<a style ="color:white;"class="navbar-brand" href="AdminMain?action=dashboard">Komoro Inventory System</a>
 	</div><!-- /.navbar-header -->
 	<ul class="nav navbar-top-links navbar-right">
-
+        <li style="color:white;"> <%= test.getFirstName() + " " + test.getLastName() %> </li>
 	<li class="dropdown">
 		<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 			<i style = "color: #ffa31a;" class="fa fa-user fa-fw"></i> <i style = "color: white;"class="fa fa-caret-down"></i>
@@ -40,7 +44,7 @@
 				<ul class="nav nav-second-level">
 					<li><a href="AdminMain?action=addEmp"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>Add Employee</a></li>
 					<li><a href="AdminMain?action=editEmp"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>Edit Employee</a></li>
-					<!--<li><a href="#"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>View All Employee</a></li>-->
+					<li><a href="#"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>View All Employee</a></li>
 					<li>
 						<a href="#"> Departments<span class="fa arrow"></span></a>
 						<ul class="nav nav-third-level">
@@ -55,13 +59,16 @@
 				<ul class="nav nav-second-level">
 					<li><a href="AdminMain?action=newInventory"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Add Inventory</a>
 					<li><a href="AdminMain?action=newSupplier"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Add Supplier</a>
-					<li><a href="AdminMain?action=viewStocks"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> View Stock Availability</a>
-					<li><a href="AdminMain?action=reqOrders"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> View Recent Requisition</a></li>
-					<li><a href="AdminMain?action=receiveStock"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Receive Stocks</a></li>
-					<li><a href="AdminMain?action=sendStock"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Send Stocks</a></li>
+					<li><a href="AdminMain?action=reqOrders"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>View Recent Requisition</a></li>
+					<li><a href="AdminMain?action=receiveStock"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>Receive Stocks</a></li>
+                                        <li><a href="AdminMain?action=viewStockAvailability"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i>View Stock Availability</a></li>
 				</ul>
 			</li><!-- Inventory Drop Down -->
 			<li>
+                                <a href="#"><i class="glyphicon glyphicon-stats"></i> Reports<span class="fa arrow"></span></a>
+				<ul class="nav nav-second-level">
+                                    <li><a href="ComMain?action=endingInventory"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Ending Inventory Count</a>
+				</ul>
 			</li><!-- Reports Drop Down -->
 		</ul>
 		</div><!-- /.sidebar-nav navbar-collapse -->

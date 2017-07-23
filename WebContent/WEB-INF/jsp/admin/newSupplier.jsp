@@ -40,7 +40,7 @@ String msg = (String) request.getAttribute("msg");
 		<div class="panel panel-default">
 			<div class="panel-heading">New Supplier Entry</div>
 			<div class="panel-body">
-				<form action="AddSupplier" method="post" id="mainForm">
+				<form action="AddSupplier" method="post">
 					<div class="form-group">
 						<label>Supplier Name</label>
 						<input type="text" name="supplierName" class="form-control" placeholder="supplier name" required autofocus>
@@ -57,38 +57,14 @@ String msg = (String) request.getAttribute("msg");
 						<label>Contact Information</label>
 						<input type="text" name="contactInfo" class="form-control" placeholder="e-mail, cellphone num, etc" required>
 					</div>
-					<button type="button" class="btn btn-success"  onclick="openModal()">Submit</button>
+					<input type="submit" class="btn btn-primary" value="Submit">
 					<input type="reset" class="btn btn-warning" value="Reset">
 				</form>
 			</div><!-- /.panel-body -->
 		</div><!-- /.panel panel-default -->
 	</div><!-- /.col-lg-12 -->
 </div><!-- /.row -->
-<!-- Modal Content -->
-<div class="modal fade" id="myModal" role="dialog">
-	<div class="modal-dialog modal-dialog-center">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Confim Changes</h4>
-			</div><!-- /.modal-header -->
-			<div class="modal-body">
-				<center>
-					<h4>Are you sure you want to proceed?</h4>
-					<input type="submit" name="submit" value="Yes" class="btn btn-info" data-toggle="modal" data-target="#myModal" form="mainForm">
-					<button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
-				</center>
-			</div><!-- /.modal-body -->
-		</div><!-- modal-content -->
-	</div><!-- /.modal-dialog modal-dialog-center -->
-</div><!-- /.modal -->
-<!-- End of Modal Content -->
 </div><!-- /#page-wrapper -->
 </div><!-- /#wrapper -->
 </body>
-<script type="text/javascript">
-function openModal(){
-	$('#myModal').modal();
-}
-</script>
 </html>

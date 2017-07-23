@@ -1,10 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="model.User, model.Commissary, dao.DepartmentDAO, java.util.ArrayList"%>
+<%@ page import="model.User, model.Commissary"%>
  <%
  User loginUser = (User) session.getAttribute("loginUser");
 Commissary com = (Commissary) request.getAttribute("com");
-ArrayList<User> employedUsers = DepartmentDAO.employedUserDepartment(com);
 %>
 <!DOCTYPE html>
 <html>
@@ -33,41 +32,12 @@ ArrayList<User> employedUsers = DepartmentDAO.employedUserDepartment(com);
 		<div class="panel panel-default">
 			<div class="panel-heading">Current Employees</div>
 			<div class="panel-body">
-				<table width="100%" class="table table-striped table-bordered table-hover" id="empTable">
-					<thead>
-						<th>Username</th>
-						<th>Employee Name</th>
-						<th>Employee Type</th>
-					</thead>
-					<tbody>
-						<%for(User emp : employedUsers){ %>
-						<tr>
-							<td><%=emp.getUserName()%></td>
-							<td><%=emp.getFirstName() + ", " + emp.getLastName() %></td>
-							<%if(emp.getUserType() == 101){ %>
-							<td>Administraitor</td>
-							<%}else if(emp.getUserType() == 103){ %>
-							<td>Commissary Clerk</td>
-							<%} %>
-						</tr>
-						<%} %>
-					</tbody>
-				</table><!-- /.table data-table -->
+
 			</div><!-- /.panel-body -->
 		</div><!-- /.panel panel-default -->
-		<div class="panel-footer">
-			--- End of Contents ---
-		</div><!-- /.panel-footer -->
 	</div><!-- /.col-lg-12 -->
 </div><!-- /.row -->
 </div><!-- /#page-wrapper -->
 </div><!-- /#wrapper -->
 </body>
-<script type="text/javascript">
-$(document).ready(function(){
-	$('#empTable').DataTable({
-		responsive : true
-	});
-});
-</script>
 </html>

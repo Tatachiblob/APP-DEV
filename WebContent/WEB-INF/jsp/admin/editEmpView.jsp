@@ -65,8 +65,8 @@ String msg = (String) request.getAttribute("msg");
 							<%}else if(u.getUserType() == 103){ %>
 							<td>Commissary Clerk</td>
 							<%} %>
-							<td align="center"><a class="btn btn-info" href="EditEmp?emp=<%=EmployeeDAO.passFunction(Integer.toString(u.getEmpId()))%>&type=edit"><i class="fa fa-edit"></i></a></td>
-							<td align="center"><a class="btn btn-warning" href="EditEmp?emp=<%=EmployeeDAO.passFunction(Integer.toString(u.getEmpId()))%>&type=delete"><i class="fa fa-eraser"></i></a></td>
+							<td align="center"><a class="btn btn-default" href="EditEmp?emp=<%=EmployeeDAO.passFunction(Integer.toString(u.getEmpId()))%>&type=edit"><i class="fa fa-edit"></i></a></td>
+							<td align="center"><a class="btn btn-default" href="EditEmp?emp=<%=EmployeeDAO.passFunction(Integer.toString(u.getEmpId()))%>&type=delete"><i class="fa fa-eraser"></i></a></td>
 						</tr>
 						<%} %>
 						<%} %>

@@ -44,7 +44,7 @@ ArrayList<Commissary> coms = DepartmentDAO.getAllCommissary();
 			<div class="panel-body">
 				<div class="row">
 					<div class="col-lg-6">
-						<form action="AddDept" method="post" id="mainForm">
+						<form action="AddDept" method="post">
 							<div class="form-group">
 								<label>Department Type</label>
 								<div class="radio">
@@ -56,11 +56,11 @@ ArrayList<Commissary> coms = DepartmentDAO.getAllCommissary();
 							</div>
 							<div class="form-group">
 								<label>Department Name</label>
-								<input class="form-control" name="deptName" type="text" placeholder="department name" autofocus required>
+								<input class="form-control" name="deptName" type="text" placeholder="department name" autofocus="" required="required">
 							</div>
 							<div class="form-group">
 								<label>Address</label>
-								<input class="form-control" name="deptAddress" type="text" placeholder="department address" required>
+								<input class="form-control" name="deptAddress" type="text" placeholder="department address" required="required">
 							</div>
 							<div class="form-group">
 								<fieldset id="kom">
@@ -73,7 +73,7 @@ ArrayList<Commissary> coms = DepartmentDAO.getAllCommissary();
 									</select>
 								</fieldset>
 							</div>
-							<button type="button" class="btn btn-success" onclick="openModal()" >Submit</button>
+							<input type="submit" class="btn btn-primary" value="Submit">
 							<input type="reset" class="btn btn-warning" value="Reset">
 						</form>
 					</div><!-- /.col-lg-6 -->
@@ -84,25 +84,6 @@ ArrayList<Commissary> coms = DepartmentDAO.getAllCommissary();
 </div><!-- /.row -->
 </div><!-- /#page-wrapper -->
 </div><!-- /#wrapper -->
-<!-- Modal Content -->
-<div class="modal fade" id="myModal" role="dialog">
-	<div class="modal-dialog modal-dialog-center">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Confim Changes</h4>
-			</div><!-- /.modal-header -->
-			<div class="modal-body">
-				<center>
-					<h4>Are you sure you want to proceed?</h4>
-					<input type="submit" name="submit" value="Yes" class="btn btn-info" data-toggle="modal" data-target="#myModal" form="mainForm">
-					<button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
-				</center>
-			</div><!-- /.modal-body -->
-		</div><!-- modal-content -->
-	</div><!-- /.modal-dialog modal-dialog-center -->
-</div><!-- /.modal -->
-<!-- End of Modal Content -->
 </body>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -123,8 +104,5 @@ $(document).ready(function(){
 	checkradiobox();
 });
 
-function openModal(){
-	$("#myModal").modal();
-}
 </script>
 </html>
