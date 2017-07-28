@@ -37,6 +37,9 @@
 			<li><a href="#"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a></li>
 			<li>
 				<a href="#"><i class="fa fa-fw fa-table"></i> Inventory<span class="fa arrow"></span></a>
+				<ul class="nav nav-second-level">
+					<li><a href="BranchMain?action=viewStocks"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> View Stock Availability</a>
+				</ul>
 			</li><!-- Inventory Drop Down -->
 			<li>
 			</li><!-- Reports Drop Down -->

@@ -1,12 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@page import="model.User, model.Commissary, model.Inventory" %>
+<%@page import="model.User, model.Commissary, model.Inventory, model.Branch" %>
 <%@page import="dao.DepartmentDAO, dao.CustomDAO" %>
 <%@page import="java.util.ArrayList" %>
 <%
 User loginUser = (User) session.getAttribute("loginUser");
 Commissary com = DepartmentDAO.getComByUserId(loginUser.getEmpId());
 ArrayList<Inventory> comInventory = CustomDAO.getCurrentComInventory(com.getComId());
+ArrayList<Branch> allBranch = DepartmentDAO.getAllBranchOfCom(com.getComId());
+Branch br = (Branch) request.getAttribute("curBranch");
+ArrayList<Inventory> brInventory = (ArrayList<Inventory>) request.getAttribute("brInventory");
 %>
 <!DOCTYPE html>
 <html>
@@ -56,7 +59,7 @@ ArrayList<Inventory> comInventory = CustomDAO.getCurrentComInventory(com.getComI
 							<td><%=i.getStock().getFloorLvl()%></td>
 							<td><%=i.getStock().getCeilLvl()%></td>
 							<td><%=i.getStock().getUnit()%></td>
-							<td><%=i.getQuantity() + "" + i.getStock().getUnit()%></td>
+							<td><strong><%=i.getQuantity() + "" + i.getStock().getUnit()%></strong></td>
 							<%if(i.getStatus().equals("Out of Stock")){ %>
 							<td bgcolor="red"><strong>Out of Stock</strong></td>
 							<%}else if(i.getStatus().equals("Low In Stock")){ %>
@@ -72,11 +75,70 @@ ArrayList<Inventory> comInventory = CustomDAO.getCurrentComInventory(com.getComI
 				</table>
 			</div><!-- /.panel-body -->
 			<div class="panel-footer">
-				End of Report
+				---End of Commissary Report---
 			</div><!-- /.panel-footer -->
 		</div><!-- /.panel panel-default -->
 	</div><!-- /.col-lg-12 -->
 </div><!-- /.row -->
+<div class="row">
+	<div class="col-lg-4">
+		<h4>Set Branch: </h4>
+		<form action="ViewStockAvailability" method="post">
+			<select id="chosenBranch" name="chosenBranch" onchange="this.form.submit()" class="form-control">
+				<option selected disabled>Choose Branch</option>
+				<%for(Branch b : allBranch){ %>
+				<option value="<%=b.getBranchId()%>"><%=b.getBranchName() %>
+				<%} %>
+			</select>
+		</form>
+	</div><!-- /.col-lg-4 -->
+</div><!-- /.row -->
+<%if(br != null){ %>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+			<div class="panel-heading"><%=br.getBranchName() %></div>
+			<div class="panel-body">
+				<table width="100%" class="table table-striped table-bordered table-hover" id="brInventory">
+					<thead>
+						<tr>
+							<th>Stock Name</th>
+							<th>Floor Level</th>
+							<th>Ceiling Level</th>
+							<th>Stock Keeping Unit</th>
+							<th>Current Quantity</th>
+							<th><strong>Product Status</strong></th>
+						</tr>
+					</thead>
+					<tbody>
+						<%for(Inventory i : brInventory){ %>
+						<tr>
+							<td><%=i.getStock().getName() %></td>
+							<td><%=i.getStock().getFloorLvl() %></td>
+							<td><%=i.getStock().getCeilLvl() %></td>
+							<td><%=i.getStock().getUnit() %></td>
+							<td><strong><%=i.getQuantity() + i.getStock().getUnit() %></strong></td>
+							<%if(i.getStatus().equals("Out of Stock")){ %>
+							<td bgcolor="red"><strong>Out of Stock</strong></td>
+							<%}else if(i.getStatus().equals("Low In Stock")){ %>
+							<td bgcolor="yellow"><strong>Low In Stock</strong></td>
+							<%}else if(i.getStatus().equals("In Stock")) {%>
+							<td bgcolor="lightgreen"><strong>In Stock</strong></td>
+							<%}else if(i.getStatus().equals("Over Stock")){ %>
+							<td bgcolor="info"><strong>Over Stock</strong></td>
+							<%} %>
+						</tr>
+						<%} %>
+					</tbody>
+				</table>
+			</div><!-- /.panel-body -->
+			<div class="panel-footer">
+				---End of Branch Report---
+			</div><!-- /.panel-footer -->
+		</div><!-- /.panel panel-default -->
+	</div><!-- /.col-lg-12 -->
+</div><!-- /.row -->
+<%} %>
 </div><!-- /#page-wrapper -->
 </div><!-- /#wrapper -->
 </body>

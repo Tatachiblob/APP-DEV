@@ -1,21 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="model.User, model.Branch, model.Stock, model.Inventory" %>
-<%@ page import="dao.DepartmentDAO, dao.StockDAO" %>
-<%@ page import="java.text.SimpleDateFormat, java.util.Date,  java.util.ArrayList" %>
+<%@page import="model.User, model.Commissary, model.Inventory, model.Stock"%>
+<%@page import="dao.DepartmentDAO, dao.CustomDAO" %>
+<%@page import="java.util.ArrayList" %>
 <%
-User loginUser = (User)session.getAttribute("loginUser");
-Date date = new Date();
-SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-String today = sdf.format(date);
-Branch br = DepartmentDAO.getBranchByUserId(loginUser.getEmpId());
-ArrayList<Inventory> inventory = StockDAO.getBranchInventory(br.getBranchId());
+User loginUser = (User) session.getAttribute("loginUser");
+Commissary myCom = DepartmentDAO.getComByUserId(loginUser.getEmpId());
+ArrayList<Inventory> comInventory = CustomDAO.getCurrentComInventory(myCom.getComId());
 %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Branch - Requisition Order</title>
+<title>Admin - Ending Inventory</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -23,47 +21,48 @@ ArrayList<Inventory> inventory = StockDAO.getBranchInventory(br.getBranchId());
 </head>
 <body>
 <div id="wrapper">
-<%@ include file="branchInclude.jsp" %>
+<%@ include file="adminInclude.jsp" %>
 <div id="page-wrapper">
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">Requisition Order (<%=today%>)</h1>
+		<h1>Ending Inventory Count</h1>
 	</div><!-- /.col-lg-12 -->
 </div><!-- /.row -->
 <div class="row">
-	<div class="col-lg-6">
-		<form action="RequisitionOrderProcess" method="post" id="mainForm">
+	<div class="col-lg-12">
 		<div class="panel panel-default">
-			<div class="panel-heading"><%=br.getBranchName()%>'s Ending Inventory</div>
+			<form action="EndingInventoryProcess" method="post" id="mainForm">
+			<input type="hidden" name="comId" value="<%=myCom.getComId()%>">
+			<div class="panel-heading"><%=myCom.getComName()%> Inventory</div>
 			<div class="panel-body">
-				<div class="col-lg-12">
-					<table width="100%" class="table table-striped table-bordered table-hover" id="reqOrderTable">
-						<thead>
+				<table width="100%" class="table table-striped table-bordered table-hover" id="myTable">
+					<thead>
+						<tr>
 							<th>Stock Name</th>
-							<th>System Quantity</th>
-							<th>Stock Unit</th>
-							<th>Ending Inventory</th>
-						</thead>
-						<tbody>
-						<%for(Inventory i : inventory){ %>
+							<th>Current Quantity</th>
+							<th>Stock Keeping Unit</th>
+							<th><strong>Adjustments</strong></th>
+						</tr>
+					</thead>
+					<tbody>
+						<%for(Inventory i : comInventory){ %>
 						<tr>
 							<td><%=i.getStock().getName() %></td>
-							<td><%=i.getQuantity() %></td>
+							<td><%=i.getQuantity() + i.getStock().getUnit() %></td>
 							<td><%=i.getStock().getUnit() %></td>
-							<td><input type="number" step="0.01" name="endingInventory<%=i.getStock().getStockId()%>" placeholder="<%=i.getStock().getName() + " ending"%>" required></td>
+							<td><input type="number" name="stock<%=i.getStock().getStockId()%>" step="0.01" min="0" class="form-control" required></td>
 						</tr>
 						<%} %>
-						</tbody>
-					</table>
-				</div><!-- /.col-lg-6 -->
+					</tbody>
+				</table>
 			</div><!-- /.panel-body -->
-		<div class="panel-footer">
-			<button type="button" class="btn btn-block btn-success" onclick="openModal()">Submit</button>
-			<input type="reset" value="Reset" class="btn btn-block btn-warning">
-		</div><!-- /.panel-footer -->
-		</div><!-- /.panel-default -->
-		</form>
-	</div><!-- /.col-lg-6 -->
+			<div class="panel-footer">
+				<button type="button" class="btn btn-block btn-success" onclick="openModal()">Submit</button>
+				<input type="reset" value="Reset" class="btn btn-warning btn-block">
+			</div><!-- /.panel-footer -->
+			</form>
+		</div><!-- /.panel panel-default -->
+	</div><!-- /.col-lg-12 -->
 </div><!-- /.row -->
 </div><!-- /#page-wrapper -->
 </div><!-- /#wrapper -->
@@ -85,10 +84,11 @@ ArrayList<Inventory> inventory = StockDAO.getBranchInventory(br.getBranchId());
 		</div><!-- modal-content -->
 	</div><!-- /.modal-dialog modal-dialog-center -->
 </div><!-- /.modal -->
+<!-- End of Modal Content -->
 </body>
 <script type="text/javascript">
 $(document).ready(function(){
-	$('#reqOrderTable').DataTable({
+	$('#myTable').DataTable({
 		responsive: true
 	});
 });

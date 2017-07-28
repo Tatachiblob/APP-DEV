@@ -3,6 +3,7 @@
 <%@ page import="model.User" %>
 <%
 User loginUser = (User) session.getAttribute("loginUser");
+String message = (String) request.getAttribute("message");
 %>
 <!DOCTYPE>
 <%if(!loginUser.getIsEmployed()){ %>
@@ -43,6 +44,15 @@ request.setAttribute("msg", msg);
 		</div>
 	</div>
 </div><!-- /.row -->
+<%if(message != null){ %>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="alert alert-info alert-dismissable">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><i class="fa fa-info-circle"></i>  <strong><%=message %>.</strong>
+		</div>
+	</div>
+</div><!-- /.row -->
+<%} %>
 <div class="row">
 	<div class="col-lg-3 col-md-6">
 		<div class="panel panel-primary">

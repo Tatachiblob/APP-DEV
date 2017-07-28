@@ -64,11 +64,17 @@ public class AdminMain extends HttpServlet {
 			if(action.equals("sendStock")){
 				forward = "WEB-INF/jsp/admin/sendStock.jsp";
 			}
+			if(action.equals("ending")){
+				forward = "WEB-INF/jsp/admin/endingInventory.jsp";
+			}
 			if(action.equals("newInventory")){
 				forward = "WEB-INF/jsp/admin/addStock.jsp";
 			}
 			if(action.equals("newSupplier")){
 				forward = "WEB-INF/jsp/admin/newSupplier.jsp";
+			}
+			if(action.equals("createPO")){
+				forward = "WEB-INF/jsp/admin/createPurchaseOrder.jsp";
 			}
 		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forward);

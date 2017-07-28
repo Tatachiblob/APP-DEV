@@ -11,6 +11,29 @@ import model.User;
 
 public class DepartmentDAO {
 
+	public static ArrayList<Branch> getAllBranchOfCom(int comID){
+		ArrayList<Branch> branches = new ArrayList<>();
+		String sql = "SELECT BR_ID FROM BRANCH WHERE COM_ID = ?;";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, comID);
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()){
+				branches.add(getBrById(rs.getInt(1)));
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return branches;
+	}
+
 	public static boolean updateEmpComToDate(int empId){
 		boolean set = false;
 		String sql = "UPDATE EMP_COM SET TO_DATE = NOW() WHERE TO_DATE IS NULL AND EMP_ID = ?;";

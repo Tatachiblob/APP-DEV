@@ -11,6 +11,92 @@ import model.InventoryStatus;
 
 public class CustomDAO {
 
+	public static boolean insertPurchaseOrder(){
+		boolean isAdded = false;
+		String sql = "";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return isAdded;
+	}
+
+	public static void insertMonthlyInventory(int latestMonthlyId, ArrayList<Inventory> endingInventory){
+		String sql = "INSERT INTO MONTHLY_DETAILS(COM_INVENTORY_ID , STOCK_ID , ACTUAL_QTY, DISCREPANCY_QTY) VALUES (?, ?, ?, '0');";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, latestMonthlyId);
+			for(Inventory i : endingInventory){
+				pStmt.setInt(2, i.getStock().getStockId());
+				pStmt.setDouble(3, i.getQuantity());
+				pStmt.executeUpdate();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+	}
+
+	public static int getLatestMonthlyInventoryID(int comId){
+		int inventoryId = -1;
+		String sql = "SELECT MAX(COM_INVENTORY_ID) FROM COM_MONTHLY_INVENTORY WHERE COM_ID = ?;";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, comId);
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()){
+				inventoryId = rs.getInt(1);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return inventoryId;
+	}
+
+	public static boolean insertComMonthlyInventory(int comId){
+		boolean isAdded = false;
+		String sql = "INSERT INTO COM_MONTHLY_INVENTORY(COM_INVENTORY_ID, COM_ID, YEARMONTH, TIME_STAMP) VALUES ('0', ?, NOW() , NOW());";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, comId);
+			int result = pStmt.executeUpdate();
+			if(result != 0){
+				isAdded = true;
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return isAdded;
+	}
+
 	public static ArrayList<Inventory> getCurrentComInventory(int comId){
 		ArrayList<Inventory> comInventory = new ArrayList<>();
 		String sql = "SELECT C.COM_ID, S.STOCK_ID, CI.CURRENT_QTY, "
@@ -40,6 +126,43 @@ public class CustomDAO {
 			}
 		}
 		return comInventory;
+	}
+
+	public static ArrayList<Inventory> getCurrentBrInventory(int brId){
+		ArrayList<Inventory> brInventory = new ArrayList<>();
+		String sql = "SELECT B.BR_ID, S.STOCK_ID, BI.CURRENT_QTY, "
+						+ " CASE "
+						+ " WHEN BI.CURRENT_QTY = 0 THEN 'Out of Stock' "
+						+ " WHEN BI.CURRENT_QTY > 0 AND BI.CURRENT_QTY <= S.FLOOR_LEVEL THEN 'Low In Stock' "
+						+ " WHEN BI.CURRENT_QTY > S.FLOOR_LEVEL AND BI.CURRENT_QTY <= S.CEIL_LEVEL THEN 'In Stock' "
+						+ " WHEN BI.CURRENT_QTY > S.CEIL_LEVEL THEN 'Over Stock' "
+						+ " END AS STOCK_STATUS "
+						+ " FROM BR_INVENTORY AS BI "
+						+ " JOIN STOCK AS S ON BI.STOCK_ID = S.STOCK_ID "
+						+ " JOIN BRANCH AS B ON BI.BR_ID = B.BR_ID "
+						+ " WHERE 		BI.BR_ID = ?;";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, brId);
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()){
+				Inventory i = new Inventory();
+				i.setStock(StockDAO.getStockById(rs.getInt(2)));
+				i.setQuantity(rs.getDouble(3));
+				i.setStatus(rs.getString(4));
+				brInventory.add(i);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return brInventory;
 	}
 
 	public static boolean addNewComDR(int comId, int brId){
@@ -249,15 +372,5 @@ public class CustomDAO {
 		if(count == endingInventory.size())
 			isAdded = true;
 		return isAdded;
-		}
-
-	public static void main(String[] args){
-		System.out.println("Hellow World");
-		for(Inventory i : getCurrentComInventory(1000)){
-			System.out.println("Stock: " + i.getStock().getName());
-			System.out.println("Qty: " + i.getQuantity() + "" + i.getStock().getUnit());
-			System.out.println("Status: " + i.getStatus());
-		}
-		System.out.println("Good Bye World");
 	}
 }
