@@ -1,6 +1,7 @@
 package servlet.admin;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,6 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import dao.DepartmentDAO;
+import dao.ReceiptDAO;
+import model.PurchaseOrder;
+import model.User;
 
 @WebServlet("/AdminMain")
 public class AdminMain extends HttpServlet {
@@ -28,6 +34,7 @@ public class AdminMain extends HttpServlet {
 			request.getRequestDispatcher("Login?action=Login");
 		}
 		else{
+			User loginUser = (User) session.getAttribute("loginUser");
 			if(action.equals("dashboard")){
 				forward = "WEB-INF/jsp/admin/index.jsp";
 			}
@@ -75,6 +82,20 @@ public class AdminMain extends HttpServlet {
 			}
 			if(action.equals("createPO")){
 				forward = "WEB-INF/jsp/admin/createPurchaseOrder.jsp";
+			}
+			if(action.equals("allReqOrders")){
+				forward = "WEB-INF/jsp/admin/viewAllReqOrders.jsp";
+			}
+			if(action.equals("allSupDr")){
+				forward = "WEB-INF/jsp/admin/viewAllSupplierDR.jsp";
+			}
+			if(action.equals("allComDr")){
+				forward = "WEB-INF/jsp/admin/viewAllComDr.jsp";
+			}
+			if(action.equals("viewPO")){
+				ArrayList<PurchaseOrder> allPo = ReceiptDAO.getAllPo(DepartmentDAO.getComByUserId(loginUser.getEmpId()).getComId());
+				forward = "WEB-INF/jsp/admin/viewAllPO.jsp";
+				request.setAttribute("allPo", allPo);
 			}
 		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher(forward);

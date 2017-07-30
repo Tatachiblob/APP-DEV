@@ -8,6 +8,8 @@ public class RequisitionOrder implements Serializable {
 	private int reqId;
 	private Branch branch;
 	private ArrayList<Inventory> reqDetails;
+	private String recordDate;
+	private String recordTime;
 
 	public RequisitionOrder(){}
 
@@ -22,5 +24,9 @@ public class RequisitionOrder implements Serializable {
 	public void setBranch(Branch branch) {this.branch = branch;}
 	public ArrayList<Inventory> getReqDetails() {return reqDetails;}
 	public void setReqDetails(ArrayList<Inventory> reqDetails) {this.reqDetails = reqDetails;}
+	public String getRecordDate() {return recordDate;}
+	public void setRecordDate(String recordDate) {this.recordDate = recordDate;}
+	public String getRecordTime() {return recordTime;}
+	public void setRecordTime(String recordTime) {this.recordTime = recordTime;}
 
 }

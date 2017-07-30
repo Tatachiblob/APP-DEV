@@ -55,20 +55,27 @@
 				<ul class="nav nav-second-level">
 					<li><a href="AdminMain?action=newInventory"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Add Inventory</a></li>
 					<li><a href="AdminMain?action=newSupplier"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Add Supplier</a></li>
-					<li><a href="AdminMain?action=viewStocks"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> View Stock Availability</a></li>
-					<li><a href="AdminMain?action=reqOrders"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> View Recent Requisition</a></li>
 					<li><a href="AdminMain?action=receiveStock"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Receive Stocks</a></li>
 					<li><a href="AdminMain?action=sendStock"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Send Stocks</a></li>
 					<li><a href="AdminMain?action=ending"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Ending Inventory Count</a></li>
 				</ul>
 			</li><!-- Inventory Drop Down -->
 			<li>
-				<a href="#"><i class="fa fa-fw fa-table"></i> Purchase Order<span class="fa arrow"></span></a>
+				<a href="#"><i class="fa fa-fw fa-file-o"></i> Purchase Order<span class="fa arrow"></span></a>
 				<ul class="nav nav-second-level">
 					<li><a href="AdminMain?action=createPO"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> Create Purchase Order</a></li>
+					<li><a href="AdminMain?action=viewPO"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> View All Purchase Order</a></li>
 				</ul>
 			</li>
 			<li>
+				<a href="#"><i class="fa fa-fw fa-paperclip"></i> Reports <span class="fa arrow"></span></a>
+				<ul class="nav nav-second-level">
+					<li><a href="AdminMain?action=viewStocks"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> View Stock Availability</a></li>
+					<li><a href="AdminMain?action=reqOrders"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> View Recent Requisition</a></li>
+					<li><a href="AdminMain?action=allReqOrders"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> View All Requisition</a></li>
+					<li><a href="AdminMain?action=allSupDr"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> View All Supplier Delivery Receipt</a></li>
+					<li><a href="AdminMain?action=allComDr"><i style = "color: #ffa31a;" class="fa fa-fw fa-chevron-right"></i> View All Commissary Deliveries</a></li>
+				</ul>
 			</li><!-- Reports Drop Down -->
 		</ul>
 		</div><!-- /.sidebar-nav navbar-collapse -->

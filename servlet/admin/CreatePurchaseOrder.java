@@ -10,11 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import dao.CustomDAO;
+import dao.DepartmentDAO;
 import dao.StockDAO;
 import dao.SupplierDAO;
 import model.Inventory;
 import model.Stock;
 import model.Supplier;
+import model.User;
 
 @WebServlet("/CreatePurchaseOrder")
 public class CreatePurchaseOrder extends HttpServlet {
@@ -34,6 +37,8 @@ public class CreatePurchaseOrder extends HttpServlet {
 			request.getRequestDispatcher("Login?action=Login");
 		}
 		else{
+			User loginUser = (User) session.getAttribute("loginUser");
+			int comId = DepartmentDAO.getComByUserId(loginUser.getEmpId()).getComId();
 			String action = request.getParameter("action");
 			String msg = "";
 			if(action.equals("changeSupplier")){
@@ -60,8 +65,16 @@ public class CreatePurchaseOrder extends HttpServlet {
 					msg = "Purchase Order Detail is Empty. Please Fill in Quantity to ";
 				}
 				else{
-
+					if(CustomDAO.insertPurchaseOrder(comId, supplierID)){
+						int poId = CustomDAO.getLatestPurchaseOrderId(comId);
+						CustomDAO.insertPurchaseOrderDetails(poId, purchaseStock);
+						msg = "Success in Creating Purchase Order.";
+					}
+					else{
+						msg = "Failed to Create Purchase Order.";
+					}
 				}
+				request.setAttribute("msg", msg);
 			}
 			request.getRequestDispatcher("WEB-INF/jsp/admin/createPurchaseOrder.jsp").forward(request, response);
 		}

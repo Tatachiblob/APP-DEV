@@ -56,7 +56,7 @@ ArrayList<Stock> supplierStock = (ArrayList<Stock>) request.getAttribute("suppli
 </br>
 <%if(supplier != null){ %>
 <div class="row">
-	<div class="col-lg-12">
+	<div class="col-lg-7">
 		<div class="panel panel-default">
 			<form action="CreatePurchaseOrder" method="post" id="mainForm">
 			<input type="hidden" name="action" value="purchase">

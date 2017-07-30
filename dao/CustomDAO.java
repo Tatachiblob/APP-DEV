@@ -8,15 +8,79 @@ import java.util.ArrayList;
 import model.Branch;
 import model.Inventory;
 import model.InventoryStatus;
+import model.Stock;
 
 public class CustomDAO {
 
-	public static boolean insertPurchaseOrder(){
-		boolean isAdded = false;
-		String sql = "";
+	public static void main(String[] args){
+		ArrayList<Inventory> temp = new ArrayList<>();
+		Stock s = new Stock();
+		s.setStockId(1);
+		Stock a = new Stock();
+		a.setStockId(2);
+		temp.add(new Inventory(s, 10));
+		temp.add(new Inventory(a, 20));
+		insertPurchaseOrderDetails(4, temp);
+		System.out.println("DONE");
+	}
+
+	public static void insertPurchaseOrderDetails(int poId, ArrayList<Inventory> purchaseOrderDetail){
+		String sql = "INSERT INTO PO_DETAILS(PO_ID, STOCK_ID, REQUEST_QTY) VALUES (?, ?, ?);";
 		Connection conn = DatabaseUtils.retrieveConnection();
 		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, poId);
+			for(Inventory i : purchaseOrderDetail){
+				pStmt.setInt(2, i.getStock().getStockId());
+				pStmt.setDouble(3, i.getQuantity());
+				pStmt.executeUpdate();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+	}
 
+	public static int getLatestPurchaseOrderId(int comId){
+		int poId = -1;
+		String sql = "SELECT MAX(PO_ID) FROM PURCHASE_ORDER WHERE COM_ID = ?;";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, comId);
+			ResultSet rs = pStmt.executeQuery();
+			while(rs.next()){
+				poId = rs.getInt(1);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(conn != null){
+				try{
+					conn.close();
+				}catch(Exception e){}
+			}
+		}
+		return poId;
+	}
+
+	public static boolean insertPurchaseOrder(int comId, int supplierId){
+		boolean isAdded = false;
+		String sql = "INSERT INTO PURCHASE_ORDER(COM_ID, SUPPLIER_ID, CREATION_DATE) VALUES (?, ?, 0);";
+		Connection conn = DatabaseUtils.retrieveConnection();
+		try{
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, comId);
+			pStmt.setInt(2, supplierId);
+			int result = pStmt.executeUpdate();
+			if(result != 0){
+				isAdded = true;
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{

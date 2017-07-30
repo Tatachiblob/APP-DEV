@@ -33,7 +33,7 @@ ArrayList<Inventory> brInventory = (ArrayList<Inventory>) request.getAttribute("
 </div><!-- /.row -->
 <div class="row">
 	<div class="col-lg-12">
-		<div class="alert alert-info">Click Stcok Name to See the Stock Flow</div>
+		<div class="alert alert-info">Click Button to See the Stock Flow</div>
 	</div><!-- /.col-lg-12 -->
 </div><!-- /.row -->
 <div class="row">
@@ -50,6 +50,7 @@ ArrayList<Inventory> brInventory = (ArrayList<Inventory>) request.getAttribute("
 							<th>Stock Keeping Unit</th>
 							<th>Current Quantity</th>
 							<th><strong>Product Status</strong></th>
+							<th>View Stock Audit</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -69,6 +70,7 @@ ArrayList<Inventory> brInventory = (ArrayList<Inventory>) request.getAttribute("
 							<%}else if(i.getStatus().equals("Over Stock")){ %>
 							<td bgcolor="info"><strong>Over Stock</strong></td>
 							<%} %>
+							<td align="center"><a href="ViewAudit?comID=<%=com.getComId()%>&stockID=<%=i.getStock().getStockId() %>" class="btn btn-info"><i class="fa fa-fw fa-level-up"></i></a></td>
 						</tr>
 					<%} %>
 					</tbody>
@@ -114,10 +116,10 @@ ArrayList<Inventory> brInventory = (ArrayList<Inventory>) request.getAttribute("
 						<%for(Inventory i : brInventory){ %>
 						<tr>
 							<td><%=i.getStock().getName() %></td>
-							<td><%=i.getStock().getFloorLvl() %></td>
-							<td><%=i.getStock().getCeilLvl() %></td>
+							<td align="right"><%=i.getStock().getFloorLvl() %></td>
+							<td align="right"><%=i.getStock().getCeilLvl() %></td>
 							<td><%=i.getStock().getUnit() %></td>
-							<td><strong><%=i.getQuantity() + i.getStock().getUnit() %></strong></td>
+							<td align="right"><strong><%=i.getQuantity() + i.getStock().getUnit() %></strong></td>
 							<%if(i.getStatus().equals("Out of Stock")){ %>
 							<td bgcolor="red"><strong>Out of Stock</strong></td>
 							<%}else if(i.getStatus().equals("Low In Stock")){ %>
